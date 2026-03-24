@@ -6,25 +6,25 @@ final class TabBarController: UITabBarController {
 
     private let profileTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.profile", comment: ""),
-        image: UIImage(systemName: "person.crop.circle.fill"),
+        image: UIImage(named: "profileIcon"),
         tag: 0
     )
     
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
-        image: UIImage(named: "catalogTabBarItem"),
+        image: UIImage(named: "catalogIcon"),
         tag: 1
     )
     
     private let cartTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.cart", comment: ""),
-        image: UIImage(named: "cartTabBarItem"),
+        image: UIImage(named: "cartIcon"),
         tag: 2
     )
     
     private let statisticsTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.statistics", comment: ""),
-        image: UIImage(systemName: "flag.2.crossed.fill"),
+        image: UIImage(named: "statisticsIcon"),
         tag: 3
     )
     
