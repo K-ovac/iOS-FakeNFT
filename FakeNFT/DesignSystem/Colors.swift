@@ -33,11 +33,7 @@ extension UIColor {
     // Secondary Colors
     static let secondary = UIColor(red: 255 / 255, green: 193 / 255, blue: 7 / 255, alpha: 1.0)
 
-    // Background Colors
-//    static let background = UIColor.white
-
-    // Text Colors
-//    static let textPrimary = UIColor.black
+    
     static let textSecondary = UIColor.gray
     static let textOnPrimary = UIColor.white
     static let textOnSecondary = UIColor.black
@@ -49,6 +45,8 @@ extension UIColor {
     private static let ypLightGrayLight = UIColor(hexString: "F7F7F8")
     private static let ypLightGrayDark = UIColor(hexString: "2C2C2E")
     
+    // Универсальные цвета из стартового проекта, пока не используются напрямую.
+    // Оставлены для будущих итераций и совместимости.
     private static let ypGrayUniversal = UIColor(hexString: "625C5C")
     private static let ypRedUniversal = UIColor(hexString: "F56B6C")
     private static let ypBackgroundUniversal = UIColor(hexString: "1A1B22")
