@@ -26,8 +26,8 @@ final class CatalogCell: UITableViewCell {
     
     private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.bodyBold
-        label.textColor = UIColor.segmentActive
+        label.font = .bodyBold
+        label.textColor = .textPrimary
         label.textAlignment = .left
         
         return label
@@ -35,8 +35,8 @@ final class CatalogCell: UITableViewCell {
     
     private lazy var nftCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.bodyBold
-        label.textColor = UIColor.segmentActive
+        label.font = .bodyBold
+        label.textColor = .textPrimary
         
         return label
     }()
@@ -55,7 +55,7 @@ final class CatalogCell: UITableViewCell {
     // MARK: - Configure UI
     
     private func configureView() {
-        contentView.backgroundColor = .clear
+        contentView.backgroundColor = .background
         selectionStyle = .none
         
         [nftImageView, nftNameLabel, nftCountLabel].forEach {

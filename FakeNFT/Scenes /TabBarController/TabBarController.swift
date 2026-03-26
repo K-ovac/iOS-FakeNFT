@@ -53,8 +53,8 @@ final class TabBarController: UITabBarController {
     // MARK: - Configure TabBar
     
     private func configureTabBar() {
-        view.backgroundColor = UIColor.background
-        tabBar.unselectedItemTintColor = UIColor.segmentActive
+        view.backgroundColor = .background
+        tabBar.unselectedItemTintColor = .primaryForeground
         
         let profileController = UIViewController()  //изменить на свой
         profileController.tabBarItem = profileTabBarItem

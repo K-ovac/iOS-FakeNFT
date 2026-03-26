@@ -19,6 +19,8 @@ final class CatalogViewController: UIViewController {
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
+        indicator.tintColor = .primaryForeground
+        
         return indicator
     }()
     
@@ -54,13 +56,13 @@ final class CatalogViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(sortButtonTapped))
-        sortButton.tintColor = .black
+        sortButton.tintColor = .primaryForeground
         
         navigationItem.rightBarButtonItem = sortButton
     }
     
     private func configureView() {
-        view.backgroundColor = UIColor.background   //color
+        view.backgroundColor = .background
         view.addSubview(catalogTableView)
         view.addSubview(loadingIndicator)
         
