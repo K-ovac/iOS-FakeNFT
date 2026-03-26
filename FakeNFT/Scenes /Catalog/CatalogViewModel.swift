@@ -127,6 +127,7 @@ final class CatalogViewModel {
             onLoadingStarted?()
         case .data(let collections):
             nftCollections = collections
+            completeSorting()
             onLoadingStopped?()
         case .failed(let error):
             let errorModel = makeErrorModel(error)
