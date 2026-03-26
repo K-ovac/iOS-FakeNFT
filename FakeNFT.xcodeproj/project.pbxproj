@@ -42,6 +42,7 @@
 		3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		46CB61FB2F74B4AE00FF46E7 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CB61FA2F74B4A000FF46E7 /* Images.swift */; };
+		46CB620D2F75335100FF46E7 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CB620C2F75334800FF46E7 /* UserDefaultsService.swift */; };
 		46E7110C2F7332D2007A035B /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E7110B2F7332C7007A035B /* CatalogViewController.swift */; };
 		46E7110E2F7332DB007A035B /* CatalogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E7110D2F7332D6007A035B /* CatalogCell.swift */; };
 		46E711172F733C34007A035B /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E711162F733C0B007A035B /* Metrics.swift */; };
@@ -108,6 +109,7 @@
 		3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePutRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		46CB61FA2F74B4A000FF46E7 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		46CB620C2F75334800FF46E7 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		46E7110B2F7332C7007A035B /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		46E7110D2F7332D6007A035B /* CatalogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCell.swift; sourceTree = "<group>"; };
 		46E711162F733C0B007A035B /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
@@ -123,7 +125,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		46CB61F62F74A45C00FF46E7 /* NftCollection */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NftCollection; sourceTree = "<group>"; };
 		46E711112F7337D3007A035B /* docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = docs; sourceTree = "<group>"; };
-		46E711182F734449007A035B /* CatalogNetwork */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CatalogNetwork; sourceTree = "<group>"; };
+		46E711182F734449007A035B /* CatalogService */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CatalogService; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,7 +199,7 @@
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46E711212F7345BD007A035B /* CatalogViewModel.swift */,
 				46E7111F2F734533007A035B /* Catalog.swift */,
-				46E711182F734449007A035B /* CatalogNetwork */,
+				46E711182F734449007A035B /* CatalogService */,
 				46E7110D2F7332D6007A035B /* CatalogCell.swift */,
 				46E7110B2F7332C7007A035B /* CatalogViewController.swift */,
 				0CFCB7482A7808900009A829 /* TestCatalogController.swift */,
@@ -320,6 +322,7 @@
 		3F6806CE29CBBD1B00B4F915 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				46CB620C2F75334800FF46E7 /* UserDefaultsService.swift */,
 				0CFCB74C2A7817C30009A829 /* MemoryStorage */,
 				3F6806CF29CBBDB100B4F915 /* NetworkClient */,
 				3F6806D629CBC50A00B4F915 /* CellsReusingUtils.swift */,
@@ -402,7 +405,7 @@
 			fileSystemSynchronizedGroups = (
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46E711112F7337D3007A035B /* docs */,
-				46E711182F734449007A035B /* CatalogNetwork */,
+				46E711182F734449007A035B /* CatalogService */,
 			);
 			name = FakeNFT;
 			packageProductDependencies = (
@@ -546,6 +549,7 @@
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
+				46CB620D2F75335100FF46E7 /* UserDefaultsService.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				46E7110C2F7332D2007A035B /* CatalogViewController.swift in Sources */,
 				46E711222F7345C4007A035B /* CatalogViewModel.swift in Sources */,

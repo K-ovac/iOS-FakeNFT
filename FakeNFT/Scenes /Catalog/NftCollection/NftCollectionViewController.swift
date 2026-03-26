@@ -6,6 +6,8 @@
 //
 import UIKit
 
+// TODO: - Реализация в 2/3 части эпика
+
 final class NftCollectionViewController: UIViewController {
     
     // MARK: - Lifecycle

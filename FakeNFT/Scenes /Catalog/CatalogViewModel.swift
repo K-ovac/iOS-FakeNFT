@@ -41,9 +41,9 @@ final class CatalogViewModel {
         }
     }
     
-    private var currentSortType: CatalogSortType = .byName {
+    private var currentSortType: CatalogSortType = UserDefaultsService.shared.getCategorySort() {
         didSet {
-            UserDefaults.standard.setValue(currentSortType.rawValue, forKey: "CatalogNftCollectionSortType")
+            UserDefaultsService.shared.setCategorySort(for: currentSortType)
             completeSorting()
         }
     }
@@ -53,11 +53,12 @@ final class CatalogViewModel {
             stateDidChanged()
         }
     }
-
+    
     //MARK: - Init
     
     init(catalogService: CatalogService) {
         self.catalogService = catalogService
+
     }
     
     // MARK: - Factory Methods
@@ -99,9 +100,9 @@ final class CatalogViewModel {
     
     func completeSorting() {
         switch currentSortType {
-            case .byName:
+        case .byName:
             nftCollections.sort { $0.name < $1.name }
-            case .byNftsCount:
+        case .byNftsCount:
             nftCollections.sort { $0.nfts.count > $1.nfts.count }
         }
     }
@@ -142,7 +143,7 @@ final class CatalogViewModel {
         default:
             message = NSLocalizedString("Error.unknown", comment: "")
         }
-
+        
         let actionText = NSLocalizedString("Error.repeat", comment: "")
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.fetchNftCollections()
