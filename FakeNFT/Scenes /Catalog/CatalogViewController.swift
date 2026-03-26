@@ -5,3 +5,207 @@
 //  Created by Максим Лозебной on 25.03.2026.
 //
 
+import UIKit
+
+final class CatalogViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    private var catalogViewModel: CatalogViewModel
+    
+    // MARK: - UI Components
+    
+    private lazy var catalogTableView = UITableView(frame: .zero, style: .plain)
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    // MARK: - Init
+    
+    init(servicesAssembly: ServicesAssembly) {
+        self.catalogViewModel = CatalogViewModel(
+            catalogService: servicesAssembly.catalogService
+        )
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureNavBar()
+        configureView()
+        bindingViewModel()
+        
+        catalogViewModel.fetchNftCollections()
+    }
+    
+    // MARK: - Configure UI
+    private func configureNavBar() {
+        let sortButton = UIBarButtonItem(
+            image: Images.sort,
+            style: .plain,
+            target: self,
+            action: #selector(sortButtonTapped))
+        sortButton.tintColor = .black
+        
+        navigationItem.rightBarButtonItem = sortButton
+    }
+    
+    private func configureView() {
+        view.backgroundColor = UIColor.background   //color
+        view.addSubview(catalogTableView)
+        view.addSubview(loadingIndicator)
+        
+        setupLayout()
+        configureCategoryTableView()
+    }
+    
+    private func setupLayout() {
+        [
+            catalogTableView,
+            loadingIndicator
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        NSLayoutConstraint.activate([
+            catalogTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            catalogTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            catalogTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            catalogTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func configureCategoryTableView() {
+        catalogTableView.backgroundColor = .clear
+        catalogTableView.contentInset = UIEdgeInsets(top: Metrics.Spacing.medium, left: 0, bottom: 0, right: 0)
+        catalogTableView.separatorStyle = .none
+        
+        catalogTableView.delegate = self
+        catalogTableView.dataSource = self
+        catalogTableView.register(
+            CatalogCell.self,
+            forCellReuseIdentifier: CatalogCell.reuseIdentifier
+        )
+        
+        catalogTableView.reloadData()
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func sortButtonTapped() {
+        showSortAlert()
+    }
+    
+    // MARK: - Sort Alert
+    
+    private func showSortAlert() {
+        let alert = UIAlertController(
+            title: NSLocalizedString("Catalog.sort.title", comment: ""),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        let sortByNameAction = UIAlertAction(
+            title: NSLocalizedString("Catalog.sort.byName", comment: ""),
+            style: .default
+        ) { [weak self] _ in
+            self?.catalogViewModel.sortByName()
+        }
+        let sortByRatingAction = UIAlertAction(
+            title: NSLocalizedString("Catalog.sort.byNftCount", comment: ""),
+            style: .default
+        ) { [weak self] _ in
+            self?.catalogViewModel.sortByNftsCount()
+        }
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("Catalog.sort.cancel", comment: ""),
+            style: .cancel
+        )
+        
+        alert.addAction(sortByNameAction)
+        alert.addAction(sortByRatingAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Binding
+    private func bindingViewModel() {
+        
+        catalogViewModel.onFetchedNftCollection = { [weak self] in
+            self?.catalogTableView.reloadData()
+            print("Обновлены данные таблицы каталога NFT")
+        }
+        
+        // TODO: - полная реализация перехода на следующий контроллер во второй части
+        catalogViewModel.onSelectedNftCollection = { [weak self] _ in
+            let vc = NftCollectionViewController()
+            self?.navigationController?.pushViewController(
+                vc, animated: true
+            )
+        }
+        catalogViewModel.onError = { [weak self] errorModel in
+            self?.showError(errorModel)
+        }
+        catalogViewModel.onLoadingStarted = { [weak self] in
+            self?.showLoading()
+        }
+        catalogViewModel.onLoadingStopped = { [weak self] in
+            self?.hideLoading()
+        }
+    }
+}
+
+// MARK: - Extension CatalogViewController: UITableViewDataSource
+
+extension CatalogViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        catalogViewModel.numberOfRows()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CatalogCell.reuseIdentifier, for: indexPath) as? CatalogCell else {
+            return UITableViewCell()
+        }
+        let catalog = catalogViewModel.nftCollection(at: indexPath.row)
+        cell.configure(with: catalog)
+        
+        return cell
+    }
+}
+
+// MARK: - CatalogViewController: UITableViewDelegate
+
+extension CatalogViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        Metrics.Sizes.cellCatalogHeight
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        catalogViewModel.selectNftCollection(at: indexPath.row)
+    }
+}
+
+// MARK: - Extension CatalogViewController: LoadingView
+
+extension CatalogViewController: LoadingView {
+    var activityIndicator: UIActivityIndicatorView {
+        return loadingIndicator
+    }
+}
+
+// MARK: - Extension CatalogViewController: ErrorView
+
+extension CatalogViewController: ErrorView { }

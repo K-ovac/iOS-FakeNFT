@@ -1,32 +1,38 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
+    
+    // MARK: - Properties
 
     var servicesAssembly: ServicesAssembly
 
+    // MARK: - TabBar Items
+    
     private let profileTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.profile", comment: ""),
-        image: UIImage(named: "profileIcon"),
+        image: Images.profileIcon,
         tag: 0
     )
     
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
-        image: UIImage(named: "catalogIcon"),
+        image: Images.catalogIcon,
         tag: 1
     )
     
     private let cartTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.cart", comment: ""),
-        image: UIImage(named: "cartIcon"),
+        image: Images.cartIcon,
         tag: 2
     )
     
     private let statisticsTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.statistics", comment: ""),
-        image: UIImage(named: "statisticsIcon"),
+        image: Images.statisticIcon,
         tag: 3
     )
+    
+    // MARK: - Init
     
     init(servicesAssembly: ServicesAssembly) {
             self.servicesAssembly = servicesAssembly
@@ -37,21 +43,27 @@ final class TabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabBar()
     }
     
+    // MARK: - Configure TabBar
+    
     private func configureTabBar() {
         view.backgroundColor = UIColor.background
-        tabBar.unselectedItemTintColor = .black
+        tabBar.unselectedItemTintColor = UIColor.segmentActive
         
         let profileController = UIViewController()  //изменить на свой
         profileController.tabBarItem = profileTabBarItem
 
-        let catalogController = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )   //изменить на свой
+        let catalogController = UINavigationController(
+            rootViewController: CatalogViewController(
+                servicesAssembly: servicesAssembly
+            ),
+        )
         catalogController.tabBarItem = catalogTabBarItem
         
         let cartController = UIViewController() //изменить на свой
