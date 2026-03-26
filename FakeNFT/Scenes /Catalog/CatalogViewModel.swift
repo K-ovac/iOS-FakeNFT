@@ -145,7 +145,7 @@ final class CatalogViewModel {
 
         let actionText = NSLocalizedString("Error.repeat", comment: "")
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
-            self?.state = .loading
+            self?.fetchNftCollections()
         }
     }
 }
