@@ -78,7 +78,7 @@ final class CatalogCell: UITableViewCell {
         NSLayoutConstraint.activate([
             nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor),
             nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.verySmall),
-            nftNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metrics.Spacing.medium2)
+            nftNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metrics.Spacing.mediumLarge)
         ])
         NSLayoutConstraint.activate([
             nftCountLabel.centerYAnchor.constraint(equalTo: nftNameLabel.centerYAnchor),
