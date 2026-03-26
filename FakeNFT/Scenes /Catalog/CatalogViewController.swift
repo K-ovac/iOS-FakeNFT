@@ -82,7 +82,7 @@ final class CatalogViewController: UIViewController {
             catalogTableView.topAnchor.constraint(equalTo: view.topAnchor),
             catalogTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             catalogTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            catalogTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            catalogTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
