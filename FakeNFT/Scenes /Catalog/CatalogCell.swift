@@ -90,7 +90,10 @@ final class CatalogCell: UITableViewCell {
     
     func configure(with catalog: Catalog) {
         if let url = URL(string: catalog.cover) {
-            nftImageView.kf.setImage(with: url)
+            nftImageView.kf.setImage(with: url) { [weak self] _ in
+                self?.setNeedsLayout()
+                self?.layoutIfNeeded()
+            }
         }
         nftNameLabel.text = catalog.name
         nftCountLabel.text = "(\(catalog.nfts.count))"
