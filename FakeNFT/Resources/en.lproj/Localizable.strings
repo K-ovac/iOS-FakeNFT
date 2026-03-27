@@ -11,8 +11,11 @@
 "Catalog.sort.byNftCount" = "By number of NFT";
 "Catalog.sort.cancel" = "Close";
 
+//Collection NFT
+"Collection.author" = "Author of the collection:";
+
 // Common Errors
 "Error.network" = "A network error has occurred";
 "Error.unknown" = "An unknown error has occurr";
 "Error.repeat" = "Repeat";
-"Error.title" = "Repeat";
+"Error.title" = "Error";

@@ -9,6 +9,7 @@ import UIKit
 
 enum Images {
     static let sort = UIImage(named: "sort")
+    static let back = UIImage(named: "back")
     
     static let profileIcon = UIImage(named: "profileIcon")
     static let catalogIcon = UIImage(named: "catalogIcon")

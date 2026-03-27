@@ -11,6 +11,9 @@
 "Catalog.sort.byNftCount" = "По количеству NFT";
 "Catalog.sort.cancel" = "Закрыть";
 
+//Collection NFT
+"Collection.author" = "Автор коллекции:";
+
 // Common Errors
 "Error.network" = "Произошла ошибка сети";
 "Error.unknown" = "Произошла неизвестная ошибка";

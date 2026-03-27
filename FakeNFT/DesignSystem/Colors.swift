@@ -56,6 +56,8 @@ extension UIColor {
     private static let ypWhiteUniversal = UIColor(hexString: "FFFFFF")
     private static let ypYellowUniversal = UIColor(hexString: "FEEF0D")
     
+    static let link = UIColor.ypBlueUniversal
+    
     static let segmentActive = UIColor { traits in
         return traits.userInterfaceStyle == .dark
         ? .ypBlackDark
