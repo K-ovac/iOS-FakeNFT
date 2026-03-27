@@ -42,6 +42,7 @@
 		3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E39E62C68CE0900FB86AC /* NftService.swift */; };
+		9F2017BA2F77143D00432AC2 /* DECOMPOSITION.md in Resources */ = {isa = PBXBuildFile; fileRef = 9F2017B92F77142300432AC2 /* DECOMPOSITION.md */; };
 		9FB602C22F7586FB00A63FAF /* NFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB602C12F7586F900A63FAF /* NFTModel.swift */; };
 		9FB602C42F75871800A63FAF /* NFTService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB602C32F75870C00A63FAF /* NFTService.swift */; };
 		9FB602C62F75872E00A63FAF /* MyNFTsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB602C52F75872D00A63FAF /* MyNFTsViewController.swift */; };
@@ -107,6 +108,7 @@
 		3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePutRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		558E39E62C68CE0900FB86AC /* NftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftService.swift; sourceTree = "<group>"; };
+		9F2017B92F77142300432AC2 /* DECOMPOSITION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DECOMPOSITION.md; sourceTree = "<group>"; };
 		9FB602C12F7586F900A63FAF /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
 		9FB602C32F75870C00A63FAF /* NFTService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTService.swift; sourceTree = "<group>"; };
 		9FB602C52F75872D00A63FAF /* MyNFTsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNFTsViewController.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 		9FB6029B2F75589400A63FAF /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				9F2017B92F77142300432AC2 /* DECOMPOSITION.md */,
 				9FB602C02F7586EB00A63FAF /* MyNFT */,
 				9FB602B32F75595900A63FAF /* Services */,
 				9FB602AF2F75593E00A63FAF /* Navigation */,
@@ -521,6 +524,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F2017BA2F77143D00432AC2 /* DECOMPOSITION.md in Resources */,
 				3F6806A329CBBAF200B4F915 /* LaunchScreen.storyboard in Resources */,
 				E1CD40DC2A96BECC00BE7FE8 /* Localizable.strings in Resources */,
 				3F6806A029CBBAF200B4F915 /* Assets.xcassets in Resources */,
