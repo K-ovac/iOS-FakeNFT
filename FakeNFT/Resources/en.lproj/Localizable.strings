@@ -1,0 +1,18 @@
+// TabBar
+"Tab.profile" = "Profile";
+"Tab.catalog" = "Catalog";
+"Tab.cart" = "Cart";
+"Tab.statistics" = "Statistics";
+
+// Catalog
+"Catalog.openNft" = "Open Nft";
+"Catalog.sort.title" = "Sort";
+"Catalog.sort.byName" = "By name";
+"Catalog.sort.byNftCount" = "By number of NFT";
+"Catalog.sort.cancel" = "Close";
+
+// Common Errors
+"Error.network" = "A network error has occurred";
+"Error.unknown" = "An unknown error has occurr";
+"Error.repeat" = "Repeat";
+"Error.title" = "Repeat";
