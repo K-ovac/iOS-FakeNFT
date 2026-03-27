@@ -29,9 +29,9 @@ final class TabBarController: UITabBarController {
     )
     
     init(servicesAssembly: ServicesAssembly) {
-            self.servicesAssembly = servicesAssembly
-            super.init(nibName: nil, bundle: nil)
-        }
+        self.servicesAssembly = servicesAssembly
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -46,20 +46,39 @@ final class TabBarController: UITabBarController {
         view.backgroundColor = UIColor.background
         tabBar.unselectedItemTintColor = .black
         
-        let profileController = UIViewController()  //изменить на свой
-        profileController.tabBarItem = profileTabBarItem
-
-        let catalogController = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )   //изменить на свой
-        catalogController.tabBarItem = catalogTabBarItem
+        print("🔧 Configuring tab bar")
         
-        let cartController = UIViewController() //изменить на свой
-        cartController.tabBarItem = cartTabBarItem
+        let profileViewModel = ProfileViewModel(profileService: servicesAssembly.profileService)
+        let profileViewController = ProfileViewController(viewModel: profileViewModel)
+        let navigationHandler = ProfileNavigationHandlerImpl(viewController: profileViewController)
         
-        let statisticsController = UIViewController()   //изменить на свой
-        statisticsController.tabBarItem = statisticsTabBarItem
-
-        viewControllers = [profileController, catalogController, cartController, statisticsController]
+        profileViewModel.setNavigationHandler(navigationHandler)
+        
+        let profileNavigationController = UINavigationController(rootViewController: profileViewController)
+        profileNavigationController.tabBarItem = profileTabBarItem
+        profileNavigationController.navigationBar.prefersLargeTitles = false
+        
+        let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        let catalogNavigationController = UINavigationController(rootViewController: catalogController)
+        catalogNavigationController.tabBarItem = catalogTabBarItem
+        
+        let cartController = UIViewController()
+        cartController.view.backgroundColor = .white
+        let cartNavigationController = UINavigationController(rootViewController: cartController)
+        cartNavigationController.tabBarItem = cartTabBarItem
+        
+        let statisticsController = UIViewController()
+        statisticsController.view.backgroundColor = .white
+        let statisticsNavigationController = UINavigationController(rootViewController: statisticsController)
+        statisticsNavigationController.tabBarItem = statisticsTabBarItem
+        
+        viewControllers = [
+            profileNavigationController,
+            catalogNavigationController,
+            cartNavigationController,
+            statisticsNavigationController
+        ]
+        
+        print("✅ Tab bar configured with \(viewControllers?.count ?? 0) controllers")
     }
 }

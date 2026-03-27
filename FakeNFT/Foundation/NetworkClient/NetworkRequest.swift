@@ -11,6 +11,7 @@ protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Dto? { get }
+    var headers: [String: String]? { get }
 }
 
 protocol Dto {
@@ -20,5 +21,6 @@ protocol Dto {
 // default values
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
-    var dto: Encodable? { nil }
+    var dto: Dto? { nil }
+    var headers: [String: String]? { nil }
 }
