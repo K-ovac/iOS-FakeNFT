@@ -5,6 +5,7 @@
 //  Created by Максим Лозебной on 25.03.2026.
 //
 import UIKit
+import Kingfisher
 
 final class CatalogCell: UITableViewCell {
     
