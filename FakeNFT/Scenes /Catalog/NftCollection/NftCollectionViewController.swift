@@ -8,6 +8,8 @@ import UIKit
 
 final class NftCollectionViewController: UIViewController {
     
+    private let catalog: Catalog
+    
     // MARK: - UI Components
     
     private lazy var nftImageView: UIImageView = {
@@ -17,7 +19,7 @@ final class NftCollectionViewController: UIViewController {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = Metrics.CornerRadius.medium
         imageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        
+        imageView.image = UIImage(named: "mock") //delete
         return imageView
     }()
     
@@ -26,7 +28,7 @@ final class NftCollectionViewController: UIViewController {
         label.font = .headline3
         label.textColor = .textPrimary
         label.textAlignment = .left
-        
+        label.text = "Peach" //delete
         return label
     }()
     
@@ -43,7 +45,12 @@ final class NftCollectionViewController: UIViewController {
     private lazy var authorLinkButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
+        button.setTitle("John Doe", for: .normal)
         button.setTitleColor(.link, for: .normal)
+        button.titleLabel?.font = .caption1
+        button.contentVerticalAlignment = .bottom
+        
+        button.addTarget(self, action: #selector(authorLinkButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -54,9 +61,18 @@ final class NftCollectionViewController: UIViewController {
         label.textColor = .textPrimary
         label.textAlignment = .left
         label.numberOfLines = 10
-        
+        label.text = "Персиковый — как облака над закатным солнцем в океане. В этой коллекции совмещены трогательная нежность и живая игривость сказочных зефирных зверей."
         return label
     }()
+    
+    init(catalog: Catalog) {
+        self.catalog = catalog
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     
@@ -123,4 +139,7 @@ final class NftCollectionViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func authorLinkButtonTapped() {
+        
+    }
 }

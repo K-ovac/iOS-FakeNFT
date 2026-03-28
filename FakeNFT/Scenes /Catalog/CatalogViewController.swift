@@ -151,9 +151,8 @@ final class CatalogViewController: UIViewController {
             print("Обновлены данные таблицы каталога NFT")
         }
         
-        // TODO: - полная реализация перехода на следующий контроллер во второй части
-        catalogViewModel.onSelectedNftCollection = { [weak self] _ in
-            let vc = NftCollectionViewController()
+        catalogViewModel.onSelectedNftCollection = { [weak self] catalog in
+            let vc = NftCollectionViewController(catalog: catalog)
             self?.navigationController?.pushViewController(
                 vc, animated: true
             )
