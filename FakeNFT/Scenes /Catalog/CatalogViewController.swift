@@ -12,6 +12,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Properties
     
     private var catalogViewModel: CatalogViewModel
+    private let servicesAssembly: ServicesAssembly
     
     // MARK: - UI Components
     
@@ -30,7 +31,7 @@ final class CatalogViewController: UIViewController {
         self.catalogViewModel = CatalogViewModel(
             catalogService: servicesAssembly.catalogService
         )
-        
+        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -152,11 +153,14 @@ final class CatalogViewController: UIViewController {
         }
         
         catalogViewModel.onSelectedNftCollection = { [weak self] catalog in
-            let vc = NftCollectionViewController(catalog: catalog)
-            self?.navigationController?.pushViewController(
+            guard let self else { return }
+            
+            let vc = NftCollectionViewController(catalog: catalog, servicesAssembly: self.servicesAssembly)
+            self.navigationController?.pushViewController(
                 vc, animated: true
             )
         }
+        
         catalogViewModel.onError = { [weak self] errorModel in
             self?.showError(errorModel)
         }

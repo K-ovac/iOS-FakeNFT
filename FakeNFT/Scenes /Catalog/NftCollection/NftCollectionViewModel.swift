@@ -22,7 +22,7 @@ final class NftCollectionViewModel {
     
     // MARK: - Closures
     
-    var onCollectionFetched: (() -> Void)?
+    var onNftCollectionFetched: (() -> Void)?
     var onError: ((ErrorModel) -> Void)?
     var onLoadingStarted: (() -> Void)?
     var onLoadingStopped: (() -> Void)?
@@ -38,7 +38,7 @@ final class NftCollectionViewModel {
     }
     private var nftCollection: Catalog? {
         didSet {
-            onCollectionFetched?()
+            onNftCollectionFetched?()
         }
     }
     private let nftCollectionId: String
@@ -52,6 +52,10 @@ final class NftCollectionViewModel {
     }
     
     // MARK: - Fetch NFT Collection
+    
+    func getNftCollection() -> Catalog? {
+        return nftCollection
+    }
     
     func fetchNftCollectionInfo() {
         state = .loading
