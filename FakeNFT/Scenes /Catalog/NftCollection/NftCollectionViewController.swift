@@ -117,11 +117,19 @@ final class NftCollectionViewController: UIViewController {
     
     private func configureView() {
         view.backgroundColor = .background
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, loadingIndicator].forEach {
+        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel].forEach {
             view.addSubview($0)
+            $0.isHidden = true
         }
+        view.addSubview(loadingIndicator)
         
         setupLayout()
+    }
+    
+    private func uiVisibility() {
+        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel].forEach {
+            $0.isHidden = false
+        }
     }
     
     // MARK: - Setup LAyout
@@ -169,6 +177,7 @@ final class NftCollectionViewController: UIViewController {
         nftCollectionViewModel.onNftCollectionFetched = { [weak self] in
             guard let collection = self?.nftCollectionViewModel.nftCollection else { return }
             
+            self?.uiVisibility()
             self?.nftNameLabel.text = collection.name
             self?.authorLinkButton.setTitle(collection.author, for: .normal)
             self?.descriptionLabel.text = collection.description
@@ -211,6 +220,6 @@ extension NftCollectionViewController: LoadingView {
     }
 }
 
-// MARK: - // MARK: Extension NftCollectionViewController: ErrorView
+// MARK: Extension NftCollectionViewController: ErrorView
 
 extension NftCollectionViewController: ErrorView { }
