@@ -124,6 +124,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		466DEB742F7917D8000DBDC8 /* WebView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebView; sourceTree = "<group>"; };
 		46CB61F62F74A45C00FF46E7 /* NftCollection */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NftCollection; sourceTree = "<group>"; };
 		46E711112F7337D3007A035B /* docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = docs; sourceTree = "<group>"; };
 		46E711182F734449007A035B /* CatalogService */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CatalogService; sourceTree = "<group>"; };
@@ -295,6 +296,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				466DEB742F7917D8000DBDC8 /* WebView */,
 				E1A1B9D82AA01C9700C3AFBC /* TabBarController */,
 				0CF2C2D92A783C1600FDC837 /* Common */,
 				0CFCB7472A7808870009A829 /* Catalog */,
@@ -404,6 +406,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				466DEB742F7917D8000DBDC8 /* WebView */,
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46E711112F7337D3007A035B /* docs */,
 				46E711182F734449007A035B /* CatalogService */,
