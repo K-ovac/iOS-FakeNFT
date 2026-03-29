@@ -39,6 +39,8 @@ class BaseWebViewController: UIViewController {
     
     deinit {
         progressObserver?.invalidate()  // остановка слежки за progressView
+        webView.stopLoading()
+        webView.navigationDelegate = nil
     }
     
     // MARK: - Configure UI
