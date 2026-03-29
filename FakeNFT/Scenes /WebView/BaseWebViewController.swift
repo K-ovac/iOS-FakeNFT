@@ -10,6 +10,8 @@ import WebKit
 
 class BaseWebViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private var progressObserver: NSKeyValueObservation?
     
     // MARK: - UI Components
@@ -33,8 +35,10 @@ class BaseWebViewController: UIViewController {
         webView.navigationDelegate = self
     }
     
+    // MARK: - Deinit
+    
     deinit {
-        progressObserver?.invalidate()
+        progressObserver?.invalidate()  // остановка слежки за progressView
     }
     
     // MARK: - Configure UI
@@ -79,6 +83,8 @@ class BaseWebViewController: UIViewController {
             progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
+    // MARK: - Setup Progress Observation
     
     private func setupProgressObservation() {
         progressObserver = webView.observe(\.estimatedProgress) { [weak self] _, _ in
