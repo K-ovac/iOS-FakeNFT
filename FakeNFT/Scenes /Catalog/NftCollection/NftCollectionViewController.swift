@@ -99,7 +99,6 @@ final class NftCollectionViewController: UIViewController {
         configureNavBar()
         configureView()
         bindingViewModel()
-        
         nftCollectionViewModel.fetchNftCollectionInfo()
     }
     
@@ -181,6 +180,7 @@ final class NftCollectionViewController: UIViewController {
         
         nftCollectionViewModel.onSelectedAuthorLink = { [weak self] url in
             let vc = AuthorWebViewController(url: url)
+            vc.hidesBottomBarWhenPushed = true
             self?.navigationController?.pushViewController(vc, animated: true)
         }
         
