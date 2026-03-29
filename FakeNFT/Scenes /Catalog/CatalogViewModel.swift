@@ -34,7 +34,7 @@ final class CatalogViewModel {
     
     // MARK: - Properties
     
-    private var catalogService: CatalogService
+    private var collectionsService: CollectionsService
     private var nftCollections: [Catalog] = [] {
         didSet {
             onFetchedNftCollection?()
@@ -56,8 +56,8 @@ final class CatalogViewModel {
     
     //MARK: - Init
     
-    init(catalogService: CatalogService) {
-        self.catalogService = catalogService
+    init(collectionsService: CollectionsService) {
+        self.collectionsService = collectionsService
 
     }
     
@@ -82,7 +82,7 @@ final class CatalogViewModel {
     
     func fetchNftCollections() {
         state = .loading
-        catalogService.fetchCategories { [weak self] result in
+        collectionsService.fetchCategories { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let catalogNftCollections):

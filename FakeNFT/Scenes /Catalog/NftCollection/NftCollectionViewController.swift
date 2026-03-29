@@ -81,7 +81,7 @@ final class NftCollectionViewController: UIViewController {
     init(catalog: Catalog, servicesAssembly: ServicesAssembly) {
         self.catalog = catalog
         self.nftCollectionViewModel = NftCollectionViewModel(
-            nftCollectionService: servicesAssembly.nftCollectionService,
+            nftCollectionService: servicesAssembly.collectionsService,
             nftCollectionId: catalog.id
         )
         super.init(nibName: nil, bundle: nil)

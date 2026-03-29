@@ -29,7 +29,7 @@ final class NftCollectionViewModel {
     
     // MARK: - Properties
     
-    private var nftCollectionService: NftCollectionService
+    private var nftCollectionService: CollectionsService
     
     private var state: NftCollectionState = .initial {
         didSet {
@@ -45,7 +45,7 @@ final class NftCollectionViewModel {
     
     //MARK: - Init
     
-    init(nftCollectionService: NftCollectionService, nftCollectionId: String) {
+    init(nftCollectionService: CollectionsService, nftCollectionId: String) {
         self.nftCollectionService = nftCollectionService
         self.nftCollectionId = nftCollectionId
 

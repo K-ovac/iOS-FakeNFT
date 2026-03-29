@@ -29,7 +29,7 @@ final class CatalogViewController: UIViewController {
     
     init(servicesAssembly: ServicesAssembly) {
         self.catalogViewModel = CatalogViewModel(
-            catalogService: servicesAssembly.catalogService
+            collectionsService: servicesAssembly.collectionsService
         )
         self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
