@@ -167,7 +167,7 @@ final class NftCollectionViewController: UIViewController {
     
     private func bindingViewModel() {
         nftCollectionViewModel.onNftCollectionFetched = { [weak self] in
-            guard let collection = self?.nftCollectionViewModel.getNftCollection() else { return }
+            guard let collection = self?.nftCollectionViewModel.nftCollection else { return }
             
             self?.nftNameLabel.text = collection.name
             self?.authorLinkButton.setTitle(collection.author, for: .normal)
@@ -176,12 +176,6 @@ final class NftCollectionViewController: UIViewController {
             if let url = URL(string: collection.cover) {
                 self?.nftImageView.kf.setImage(with: url)
             }
-        }
-        
-        nftCollectionViewModel.onSelectedAuthorLink = { [weak self] url in
-            let vc = AuthorWebViewController(url: url)
-            vc.hidesBottomBarWhenPushed = true
-            self?.navigationController?.pushViewController(vc, animated: true)
         }
         
         nftCollectionViewModel.onError = { [weak self] errorModel in
@@ -202,8 +196,10 @@ final class NftCollectionViewController: UIViewController {
     }
     
     @objc private func authorLinkButtonTapped() {
-        nftCollectionViewModel.selectAuthorLink()
-        print("Author \(catalog.author) website: \(catalog.website)")
+        let vc = AuthorWebViewController(url: AuthorWebRequestConstant.authorURL)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+        print("Author \(catalog.author), website: \(catalog.website)")
     }
 }
 

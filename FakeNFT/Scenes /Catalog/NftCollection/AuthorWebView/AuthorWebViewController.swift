@@ -7,7 +7,6 @@
 
 
 import UIKit
-import WebKit
 
 final class AuthorWebViewController: BaseWebViewController {
     
