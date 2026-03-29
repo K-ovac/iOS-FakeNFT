@@ -39,14 +39,11 @@ extension NetworkClient {
 struct DefaultNetworkClient: NetworkClient {
     private let session: URLSession
     private let decoder: JSONDecoder
-    private let encoder: JSONEncoder
 
     init(session: URLSession = URLSession.shared,
-         decoder: JSONDecoder = JSONDecoder(),
-         encoder: JSONEncoder = JSONEncoder()) {
+         decoder: JSONDecoder = JSONDecoder()) {
         self.session = session
         self.decoder = decoder
-        self.encoder = encoder
     }
 
     @discardableResult
@@ -61,14 +58,35 @@ struct DefaultNetworkClient: NetworkClient {
             }
         }
         guard let urlRequest = create(request: request) else { return nil }
+        
+        print("📤 Sending request to: \(urlRequest.url?.absoluteString ?? "unknown")")
+        print("📤 HTTP Method: \(urlRequest.httpMethod ?? "unknown")")
+        print("📤 Headers: \(urlRequest.allHTTPHeaderFields ?? [:])")
+        if let httpBody = urlRequest.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
+            print("📤 Body: \(bodyString)")
+        }
 
         let task = session.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                print("❌ Network error: \(error)")
+                onResponse(.failure(NetworkClientError.urlRequestError(error)))
+                return
+            }
+            
             guard let response = response as? HTTPURLResponse else {
+                print("❌ Invalid response")
                 onResponse(.failure(NetworkClientError.urlSessionError))
                 return
             }
 
+            print("📥 Response status code: \(response.statusCode)")
+            
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response body: \(responseString)")
+            }
+
             guard 200 ..< 300 ~= response.statusCode else {
+                print("❌ HTTP error: \(response.statusCode)")
                 onResponse(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                 return
             }
@@ -76,11 +94,9 @@ struct DefaultNetworkClient: NetworkClient {
             if let data = data {
                 onResponse(.success(data))
                 return
-            } else if let error = error {
-                onResponse(.failure(NetworkClientError.urlRequestError(error)))
-                return
             } else {
-                assertionFailure("Unexpected condition!")
+                print("❌ No data received")
+                onResponse(.failure(NetworkClientError.urlSessionError))
                 return
             }
         }
@@ -114,26 +130,36 @@ struct DefaultNetworkClient: NetworkClient {
             assertionFailure("Empty endpoint")
             return nil
         }
-
+        
+        print("🌐 Creating request: \(request.httpMethod.rawValue) \(endpoint)")
+        
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
+        
+        let token = RequestConstants.token
+        urlRequest.addValue(token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        print("🔑 Token added: \(token)")
 
-        urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
-
-        if let dtoDictionary = request.dto?.asDictionary() {
-            var urlComponents = URLComponents()
-            let queryItems = dtoDictionary.map { field in
-                URLQueryItem(
-                    name: field.key,
-                    value: field.value
-                    )
+        if let headers = request.headers {
+            for (key, value) in headers {
+                urlRequest.addValue(value, forHTTPHeaderField: key)
+                print("📋 Custom header: \(key): \(value)")
             }
-            urlComponents.queryItems = queryItems
-            urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
 
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        if let dto = request.dto {
+            let parameters = dto.asDictionary()
+            
+            if !parameters.isEmpty {
+                var components = URLComponents()
+                components.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+                urlRequest.httpBody = components.query?.data(using: .utf8)
+                urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                print("📦 Sending as URL-encoded with parameters: \(parameters)")
+            }
+        } else {
+            print("📦 No body")
+        }
 
         return urlRequest
     }
@@ -141,8 +167,13 @@ struct DefaultNetworkClient: NetworkClient {
     private func parse<T: Decodable>(data: Data, type _: T.Type, onResponse: @escaping (Result<T, Error>) -> Void) {
         do {
             let response = try decoder.decode(T.self, from: data)
+            print("✅ Successfully parsed response")
             onResponse(.success(response))
         } catch {
+            print("❌ Parsing error: \(error)")
+            if let string = String(data: data, encoding: .utf8) {
+                print("Raw data: \(string)")
+            }
             onResponse(.failure(NetworkClientError.parsingError))
         }
     }
