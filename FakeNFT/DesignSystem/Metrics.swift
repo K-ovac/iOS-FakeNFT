@@ -14,7 +14,9 @@ enum Metrics {
     
     enum Spacing {
         static let verySmall: CGFloat = 4
+        static let spacing5: CGFloat = 5
         static let small: CGFloat = 8
+        static let smallLarge: CGFloat = 13
         static let medium: CGFloat = 16
         static let mediumLarge: CGFloat = 17
         static let large: CGFloat = 24
@@ -32,5 +34,6 @@ enum Metrics {
     
     enum Sizes {
         static let cellCatalogHeight: CGFloat = 187
+        static let nftCollectionImageHeight: CGFloat = 310
     }
 }

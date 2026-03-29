@@ -9,6 +9,8 @@ import Kingfisher
 
 final class NftCollectionViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let catalog: Catalog
     private var nftCollectionViewModel: NftCollectionViewModel
     
@@ -61,7 +63,7 @@ final class NftCollectionViewController: UIViewController {
         label.font = .caption2
         label.textColor = .textPrimary
         label.textAlignment = .left
-        label.numberOfLines = 10
+        label.numberOfLines = .zero
         
         return label
     }()
@@ -73,6 +75,8 @@ final class NftCollectionViewController: UIViewController {
         
         return indicator
     }()
+    
+    // MARK: - Init
     
     init(catalog: Catalog, servicesAssembly: ServicesAssembly) {
         self.catalog = catalog
@@ -99,6 +103,8 @@ final class NftCollectionViewController: UIViewController {
         nftCollectionViewModel.fetchNftCollectionInfo()
     }
     
+    // MARK: - Configure UI
+    
     private func configureNavBar() {
         let backButton = UIBarButtonItem(
             image: Images.back,
@@ -119,6 +125,8 @@ final class NftCollectionViewController: UIViewController {
         setupLayout()
     }
     
+    // MARK: - Setup LAyout
+    
     private func setupLayout() {
         [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, loadingIndicator].forEach {
             ($0).translatesAutoresizingMaskIntoConstraints = false
@@ -128,17 +136,18 @@ final class NftCollectionViewController: UIViewController {
             nftImageView.topAnchor.constraint(equalTo: view.topAnchor),
             nftImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             nftImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            nftImageView.bottomAnchor.constraint(equalTo: nftNameLabel.topAnchor, constant: -Metrics.Spacing.medium)
+            nftImageView.bottomAnchor.constraint(equalTo: nftNameLabel.topAnchor, constant: -Metrics.Spacing.medium),
+            nftImageView.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCollectionImageHeight)
         ])
         NSLayoutConstraint.activate([
             nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor, constant: Metrics.Spacing.medium),
             nftNameLabel.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -Metrics.Spacing.medium),
-            nftNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 326), //value
+            nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.medium),
         ])
         NSLayoutConstraint.activate([
-            authorLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor, constant: Metrics.Spacing.medium),
+            authorLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: authorLinkButton.leadingAnchor, constant: -Metrics.Spacing.verySmall),
-            authorLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 13), //value
+            authorLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: Metrics.Spacing.smallLarge),
         ])
         NSLayoutConstraint.activate([
             authorLinkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: Metrics.Spacing.verySmall),
@@ -147,13 +156,15 @@ final class NftCollectionViewController: UIViewController {
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: nftNameLabel.trailingAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 5)
+            descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: Metrics.Spacing.spacing5)
         ])
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
+    // MARK: - Binding
     
     private func bindingViewModel() {
         nftCollectionViewModel.onNftCollectionFetched = { [weak self] in
@@ -184,6 +195,8 @@ final class NftCollectionViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -194,10 +207,14 @@ final class NftCollectionViewController: UIViewController {
     }
 }
 
+// MARK: Extension NftCollectionViewController: LoadingView
+
 extension NftCollectionViewController: LoadingView {
     var activityIndicator: UIActivityIndicatorView {
         return loadingIndicator
     }
 }
+
+// MARK: - // MARK: Extension NftCollectionViewController: ErrorView
 
 extension NftCollectionViewController: ErrorView { }
