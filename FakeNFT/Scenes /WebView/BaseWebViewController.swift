@@ -10,6 +10,8 @@ import WebKit
 
 class BaseWebViewController: UIViewController {
     
+    private var progressObserver: NSKeyValueObservation?
+    
     // MARK: - UI Components
     
     private lazy var webView = WKWebView()
@@ -29,6 +31,10 @@ class BaseWebViewController: UIViewController {
         configureView()
         
         webView.navigationDelegate = self
+    }
+    
+    deinit {
+        progressObserver?.invalidate()
     }
     
     // MARK: - Configure UI
@@ -51,6 +57,7 @@ class BaseWebViewController: UIViewController {
             view.addSubview($0)
         }
         setupLayout()
+        setupProgressObservation()
     }
     
     // MARK: - Setup Layout
@@ -73,6 +80,12 @@ class BaseWebViewController: UIViewController {
         ])
     }
     
+    private func setupProgressObservation() {
+        progressObserver = webView.observe(\.estimatedProgress) { [weak self] _, _ in
+            self?.progressView.progress = Float(self?.webView.estimatedProgress ?? 0)
+        }
+    }
+    
     // MARK: - Action
     
     @objc private func backButtonTapped() {
@@ -90,13 +103,13 @@ class BaseWebViewController: UIViewController {
 // MARK: - Extension BaseWebViewController: WKNavigationDelegate
 
 extension BaseWebViewController: WKNavigationDelegate {
-    // TODO: - черновой вариант загрузки
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        progressView.isHidden = false
         progressView.progress = 0
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        progressView.progress = 1
+        progressView.isHidden = true
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
