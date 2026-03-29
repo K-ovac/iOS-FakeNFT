@@ -90,6 +90,7 @@ class BaseWebViewController: UIViewController {
 // MARK: - Extension BaseWebViewController: WKNavigationDelegate
 
 extension BaseWebViewController: WKNavigationDelegate {
+    // TODO: - черновой вариант загрузки
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         progressView.progress = 0
     }

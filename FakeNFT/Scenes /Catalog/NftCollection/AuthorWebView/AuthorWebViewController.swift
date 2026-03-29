@@ -13,16 +13,16 @@ final class AuthorWebViewController: BaseWebViewController {
     
     // MARK: - Properties
     
-    private let authorWebViewViewModel: AuthorWebViewViewModel
+    private let url: String
     
     // MARK: - Init
     
-    init(authorWebViewViewModel: AuthorWebViewViewModel) {
-        self.authorWebViewViewModel = authorWebViewViewModel
+    init(url: String) {
+        self.url = url
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -31,6 +31,7 @@ final class AuthorWebViewController: BaseWebViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        load(url: url)
     }
     
 }

@@ -168,6 +168,11 @@ final class NftCollectionViewController: UIViewController {
             }
         }
         
+        nftCollectionViewModel.onSelectedAuthorLink = { [weak self] url in
+            let vc = AuthorWebViewController(url: url)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
         nftCollectionViewModel.onError = { [weak self] errorModel in
             self?.showError(errorModel)
         }
@@ -184,7 +189,8 @@ final class NftCollectionViewController: UIViewController {
     }
     
     @objc private func authorLinkButtonTapped() {
-        
+        nftCollectionViewModel.selectAuthorLink()
+        print("Author \(catalog.author) website: \(catalog.website)")
     }
 }
 

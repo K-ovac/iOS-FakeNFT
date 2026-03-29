@@ -26,6 +26,7 @@ final class NftCollectionViewModel {
     var onError: ((ErrorModel) -> Void)?
     var onLoadingStarted: (() -> Void)?
     var onLoadingStopped: (() -> Void)?
+    var onSelectedAuthorLink: ((String) -> Void)?
     
     // MARK: - Properties
     
@@ -104,5 +105,12 @@ final class NftCollectionViewModel {
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.fetchNftCollectionInfo()
         }
+    }
+    
+    func selectAuthorLink() {
+        guard let nftCollection else { return }
+        
+        let authorLink = nftCollection.website
+        onSelectedAuthorLink?(authorLink)
     }
 }
