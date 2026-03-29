@@ -127,7 +127,7 @@
 		466DEB742F7917D8000DBDC8 /* WebView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebView; sourceTree = "<group>"; };
 		46CB61F62F74A45C00FF46E7 /* NftCollection */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NftCollection; sourceTree = "<group>"; };
 		46E711112F7337D3007A035B /* docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = docs; sourceTree = "<group>"; };
-		46E711182F734449007A035B /* CatalogService */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CatalogService; sourceTree = "<group>"; };
+		46E711182F734449007A035B /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,10 +201,10 @@
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46E711212F7345BD007A035B /* CatalogViewModel.swift */,
 				46E7111F2F734533007A035B /* Catalog.swift */,
-				46E711182F734449007A035B /* CatalogService */,
 				46E7110D2F7332D6007A035B /* CatalogCell.swift */,
 				46E7110B2F7332C7007A035B /* CatalogViewController.swift */,
 				0CFCB7482A7808900009A829 /* TestCatalogController.swift */,
+				46E711182F734449007A035B /* Services */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -409,7 +409,7 @@
 				466DEB742F7917D8000DBDC8 /* WebView */,
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46E711112F7337D3007A035B /* docs */,
-				46E711182F734449007A035B /* CatalogService */,
+				46E711182F734449007A035B /* Services */,
 			);
 			name = FakeNFT;
 			packageProductDependencies = (
