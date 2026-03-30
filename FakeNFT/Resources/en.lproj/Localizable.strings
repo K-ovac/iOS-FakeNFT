@@ -19,3 +19,6 @@
 "Error.unknown" = "An unknown error has occurr";
 "Error.repeat" = "Repeat";
 "Error.title" = "Error";
+
+//
+"RefreshControl.title" = "Updating";

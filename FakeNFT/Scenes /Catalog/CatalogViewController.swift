@@ -25,6 +25,18 @@ final class CatalogViewController: UIViewController {
         return indicator
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .primaryForeground
+        refreshControl.attributedTitle = NSAttributedString(
+            string: NSLocalizedString("RefreshControl.title", comment: "")
+        )
+        
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
+        return refreshControl
+    }()
+    
     // MARK: - Init
     
     init(servicesAssembly: ServicesAssembly) {
@@ -102,6 +114,7 @@ final class CatalogViewController: UIViewController {
             CatalogCell.self,
             forCellReuseIdentifier: CatalogCell.reuseIdentifier
         )
+        catalogTableView.refreshControl = refreshControl
         
         catalogTableView.reloadData()
     }
@@ -110,6 +123,10 @@ final class CatalogViewController: UIViewController {
     
     @objc private func sortButtonTapped() {
         showSortAlert()
+    }
+    
+    @objc private func refreshData() {
+        catalogViewModel.fetchNftCollections()
     }
     
     // MARK: - Sort Alert
@@ -149,6 +166,7 @@ final class CatalogViewController: UIViewController {
         
         catalogViewModel.onFetchedNftCollection = { [weak self] in
             self?.catalogTableView.reloadData()
+            self?.refreshControl.endRefreshing()
             print("Обновлены данные таблицы каталога NFT")
         }
         
