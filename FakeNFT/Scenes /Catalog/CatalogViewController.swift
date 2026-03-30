@@ -174,6 +174,7 @@ final class CatalogViewController: UIViewController {
             guard let self else { return }
             
             let vc = NftCollectionViewController(catalog: catalog, servicesAssembly: self.servicesAssembly)
+            vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(
                 vc, animated: true
             )

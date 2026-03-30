@@ -206,7 +206,6 @@ final class NftCollectionViewController: UIViewController {
     
     @objc private func authorLinkButtonTapped() {
         let vc = AuthorWebViewController(url: AuthorWebRequestConstant.authorURL)
-        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
         print("Author \(catalog.author), website: \(catalog.website)")
     }
