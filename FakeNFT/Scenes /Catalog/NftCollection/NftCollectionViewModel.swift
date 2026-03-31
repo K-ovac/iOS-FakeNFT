@@ -48,7 +48,6 @@ final class NftCollectionViewModel {
     init(nftCollectionService: CollectionsService, nftCollectionId: String) {
         self.nftCollectionService = nftCollectionService
         self.nftCollectionId = nftCollectionId
-
     }
     
     // MARK: - Fetch NFT Collection
