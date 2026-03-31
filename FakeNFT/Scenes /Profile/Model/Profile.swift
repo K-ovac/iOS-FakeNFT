@@ -17,7 +17,6 @@ struct Profile: Decodable {
     let id: String
 }
 
-// Модель для обновления
 struct ProfileUpdate: Encodable {
     let name: String
     let avatar: String
