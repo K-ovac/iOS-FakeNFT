@@ -141,7 +141,6 @@ final class MyNFTTableViewCell: UITableViewCell {
             nftImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
         
-        // Настраиваем звезды рейтинга
         setupRating(rating: nft.rating)
     }
     

@@ -50,7 +50,16 @@ final class TabBarController: UITabBarController {
         
         let profileViewModel = ProfileViewModel(profileService: servicesAssembly.profileService)
         let profileViewController = ProfileViewController(viewModel: profileViewModel)
-        let navigationHandler = ProfileNavigationHandlerImpl(viewController: profileViewController)
+        
+        let onProfileUpdated: () -> Void = { [weak profileViewModel] in
+            print("🔄 Refreshing profile after edit")
+            profileViewModel?.fetchProfile()
+        }
+        
+        let navigationHandler = ProfileNavigationHandlerImpl(
+            viewController: profileViewController,
+            onProfileUpdated: onProfileUpdated
+        )
         
         profileViewModel.setNavigationHandler(navigationHandler)
         

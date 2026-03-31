@@ -11,19 +11,19 @@ struct ProfileUpdateRequest: NetworkRequest {
     let profile: ProfileUpdate
     
     var endpoint: URL? {
-        return URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
     
     var httpMethod: HttpMethod {
-        return .put
+        .put
     }
     
     var dto: Dto? {
-        return ProfileUpdateDto(profile: profile)
+        ProfileUpdateDto(profile: profile)
     }
     
     var headers: [String: String]? {
-        return nil
+        ["Content-Type": "application/x-www-form-urlencoded"]
     }
 }
 
@@ -31,20 +31,22 @@ struct ProfileUpdateDto: Dto {
     let profile: ProfileUpdate
     
     func asDictionary() -> [String: String] {
-        var dict: [String: String] = [:]
+        var dict: [String: String] = [
+            "name": profile.name,
+            "avatar": profile.avatar,
+            "website": profile.website,
+            "description": profile.description
+        ]
         
-        dict["name"] = profile.name
-        dict["avatar"] = profile.avatar
-        dict["website"] = profile.website
-        dict["likes"] = profile.likes.joined(separator: ",")
-        dict["nfts"] = profile.nfts.joined(separator: ",")
+        if !profile.likes.isEmpty {
+            dict["likes"] = profile.likes.joined(separator: ",")
+        }
         
-        if let description = profile.description, !description.isEmpty {
-            dict["description"] = description
+        if !profile.nfts.isEmpty {
+            dict["nfts"] = profile.nfts.joined(separator: ",")
         }
         
         print("📤 Update payload: \(dict)")
-        
         return dict
     }
 }

@@ -18,14 +18,23 @@ protocol ProfileNavigationHandler: AnyObject {
 final class ProfileNavigationHandlerImpl: ProfileNavigationHandler {
     private weak var viewController: UIViewController?
     
-    init(viewController: UIViewController) {
+    private let onProfileUpdated: (() -> Void)?
+    
+    init(viewController: UIViewController, onProfileUpdated: (() -> Void)? = nil) {
         self.viewController = viewController
+        self.onProfileUpdated = onProfileUpdated
         print("🔗 ProfileNavigationHandlerImpl initialized")
     }
     
     func navigateToEditProfile(profile: Profile?) {
         print("🔜 Navigating to edit profile")
         let editVC = ProfileEditViewController(profile: profile)
+        
+        editVC.onProfileUpdated = { [weak self] in
+            print("✅ Profile updated, refreshing data")
+            self?.onProfileUpdated?()
+        }
+        
         let navController = UINavigationController(rootViewController: editVC)
         viewController?.present(navController, animated: true)
     }
@@ -43,14 +52,18 @@ final class ProfileNavigationHandlerImpl: ProfileNavigationHandler {
     }
     
     func navigateToFavorites(nftIds: [String]) {
-        print("🔜 Favorites screen will be implemented - received IDs: \(nftIds)")
+        print("🔜 Opening Favorites screen with IDs: \(nftIds)")
         
-        let alert = UIAlertController(
-            title: "Избранные NFT",
-            message: "Экран будет реализован позже\nПолучено NFT: \(nftIds.count)",
-            preferredStyle: .alert
+        let nftService = NFTListServiceImpl(networkClient: DefaultNetworkClient())
+        let profileService = ProfileServiceImpl(networkClient: DefaultNetworkClient())
+        
+        let viewModel = FavoritesNFTViewModel(
+            favoriteIds: nftIds,
+            nftService: nftService,
+            profileService: profileService
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        viewController?.present(alert, animated: true)
+        
+        let favoritesVC = FavoritesNFTViewController(viewModel: viewModel)
+        viewController?.navigationController?.pushViewController(favoritesVC, animated: true)
     }
 }
