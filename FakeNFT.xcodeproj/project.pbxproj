@@ -370,17 +370,9 @@
 			path = FavoritesNFT;
 			sourceTree = "<group>";
 		};
-		9F2017EA2F7BDA8300432AC2 /* Mock */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Mock;
-			sourceTree = "<group>";
-		};
 		9FB6029B2F75589400A63FAF /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				9F2017EA2F7BDA8300432AC2 /* Mock */,
 				9F2017E12F79822B00432AC2 /* FavoritesNFT */,
 				9F2017B92F77142300432AC2 /* DECOMPOSITION.md */,
 				9FB602C02F7586EB00A63FAF /* MyNFT */,
