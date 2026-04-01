@@ -76,6 +76,15 @@ final class NftCollectionViewController: UIViewController {
         return indicator
     }()
     
+    private lazy var nftsCollectionView: UICollectionView = {
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = true
+        
+        return collectionView
+    }()
+    
     // MARK: - Init
     
     init(catalog: Catalog, servicesAssembly: ServicesAssembly) {
@@ -117,17 +126,18 @@ final class NftCollectionViewController: UIViewController {
     
     private func configureView() {
         view.backgroundColor = .background
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel].forEach {
+        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, nftsCollectionView].forEach {
             view.addSubview($0)
             $0.isHidden = true
         }
         view.addSubview(loadingIndicator)
         
+        configureNftsCollectionView()
         setupLayout()
     }
     
     private func uiVisibility() {
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel].forEach {
+        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, nftsCollectionView].forEach {
             $0.isHidden = false
         }
     }
@@ -135,7 +145,7 @@ final class NftCollectionViewController: UIViewController {
     // MARK: - Setup LAyout
     
     private func setupLayout() {
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, loadingIndicator].forEach {
+        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, loadingIndicator, nftsCollectionView].forEach {
             ($0).translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -169,6 +179,25 @@ final class NftCollectionViewController: UIViewController {
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+            nftsCollectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
+            nftsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            nftsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            nftsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func configureNftsCollectionView() {
+        nftsCollectionView.delegate = self
+        nftsCollectionView.dataSource = self
+        
+        nftsCollectionView.register(
+            NftCollectionCell.self,
+            forCellWithReuseIdentifier: NftCollectionCell.reuseIdentifier
+        )
+        
+        nftsCollectionView.reloadData()
     }
     
     // MARK: - Binding
@@ -222,3 +251,41 @@ extension NftCollectionViewController: LoadingView {
 // MARK: Extension NftCollectionViewController: ErrorView
 
 extension NftCollectionViewController: ErrorView { }
+
+extension NftCollectionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 108, height: 192)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 16)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        9
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        8
+    }
+}
+
+
+extension NftCollectionViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NftCollectionCell.reuseIdentifier, for: indexPath) as? NftCollectionCell else { return UICollectionViewCell() }
+        
+        
+        return cell
+    }
+    
+    
+}
+
+extension NftCollectionViewController: UICollectionViewDelegate {
+    
+}
