@@ -216,6 +216,10 @@ final class NftCollectionViewController: UIViewController {
             }
         }
         
+        nftCollectionViewModel.onNftsFetched = { [weak self] in
+            self?.nftsCollectionView.reloadData()
+        }
+        
         nftCollectionViewModel.onError = { [weak self] errorModel in
             self?.showError(errorModel)
         }
@@ -252,9 +256,17 @@ extension NftCollectionViewController: LoadingView {
 
 extension NftCollectionViewController: ErrorView { }
 
+// MARK: - Extension NftCollectionViewController: UICollectionViewDelegateFlowLayout
+
 extension NftCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 108, height: 192)
+        let padding: CGFloat = 16 + 16
+        let spacing: CGFloat = 9 * 2
+        let availableWidth = collectionView.frame.width - padding - spacing
+        
+        let width = floor(availableWidth / 3)
+        
+        return CGSize(width: width, height: 192)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -262,29 +274,34 @@ extension NftCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        9
+        8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        8
+        9
     }
 }
 
+// MARK: - Extension NftCollectionViewController: UICollectionViewDataSource
 
 extension NftCollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
+        nftCollectionViewModel.numberOfNfts()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NftCollectionCell.reuseIdentifier, for: indexPath) as? NftCollectionCell else { return UICollectionViewCell() }
         
+        let nft = nftCollectionViewModel.nft(at: indexPath.row)
+        cell.configure(with: nft)
         
         return cell
     }
     
     
 }
+
+// MARK: - Extension NftCollectionViewController: UICollectionViewDelegate
 
 extension NftCollectionViewController: UICollectionViewDelegate {
     

@@ -10,12 +10,14 @@
 
 typealias CatalogCompletion = (Result<[Catalog], Error>) -> Void
 typealias NftCollectionCompletion = (Result<Catalog, Error>) -> Void
+typealias NftCardCompletion = (Result<NFT, Error>) -> Void
 
 // MARK: - Protocol CollectionsService
 
 protocol CollectionsService {
     func fetchCategories(completion: @escaping CatalogCompletion)
     func fetchNftCollection(id: String, completion: @escaping NftCollectionCompletion)
+    func fetchNftCard(id: String, completion: @escaping NftCardCompletion)
 }
 
 // MARK: - CollectionsServiceImpl
@@ -41,6 +43,13 @@ extension CollectionsServiceImpl: CollectionsService {
     func fetchCategories(completion: @escaping CatalogCompletion) {
         let request = CatalogRequest()
         networkClient.send(request: request, type: [Catalog].self) { result in
+            completion(result)
+        }
+    }
+    
+    func fetchNftCard(id: String, completion: @escaping NftCardCompletion) {
+        let request = NftRequest(id: id)
+        networkClient.send(request: request, type: NFT.self) { result in
             completion(result)
         }
     }

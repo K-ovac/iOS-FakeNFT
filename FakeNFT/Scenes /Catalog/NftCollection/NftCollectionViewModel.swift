@@ -26,10 +26,12 @@ final class NftCollectionViewModel {
     var onError: ((ErrorModel) -> Void)?
     var onLoadingStarted: (() -> Void)?
     var onLoadingStopped: (() -> Void)?
+    var onNftsFetched: (() -> Void)?
     
     // MARK: - Properties
     
     private var nftCollectionService: CollectionsService
+    private let nftCollectionId: String
     
     private var state: NftCollectionState = .initial {
         didSet {
@@ -41,7 +43,12 @@ final class NftCollectionViewModel {
             onNftCollectionFetched?()
         }
     }
-    private let nftCollectionId: String
+    
+    private(set) var nfts: [NFT] = [] {
+        didSet {
+            onNftsFetched?()
+        }
+    }
     
     //MARK: - Init
     
@@ -78,6 +85,7 @@ final class NftCollectionViewModel {
             onLoadingStarted?()
         case .data(let collection):
             nftCollection = collection
+            fetchNfts(nftsId: collection.nfts)
             onLoadingStopped?()
         case .failed(let error):
             let errorModel = makeErrorModel(error)
@@ -98,6 +106,50 @@ final class NftCollectionViewModel {
         let actionText = NSLocalizedString("Error.repeat", comment: "")
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.fetchNftCollectionInfo()
+        }
+    }
+}
+
+//MARK: - Extension NftCollectionViewModel for Nfts
+
+extension NftCollectionViewModel {
+    
+    // MARK: - Factory Mathods
+    
+    func numberOfNfts() -> Int {
+        return nfts.count
+    }
+    
+    func nft(at index: Int) -> NFT {
+        nfts[index]
+    }
+    
+    // MARK: - Fetch nfts
+    
+    func fetchNfts(nftsId: [String]) {
+        let dispatchGroup = DispatchGroup()
+        var fetchedNfts: [NFT] = []
+        
+        
+        nftsId.forEach { nftId in
+            dispatchGroup.enter()
+            
+            nftCollectionService.fetchNftCard(id: nftId) { result in
+                switch result {
+                    
+                case .success(let nft):
+                    fetchedNfts.append(nft)
+                case .failure(let error):
+                    print(error)
+                    break
+                }
+                
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.nfts = fetchedNfts
         }
     }
 }
