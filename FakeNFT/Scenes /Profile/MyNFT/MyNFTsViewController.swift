@@ -35,8 +35,8 @@ final class MyNFTsViewController: UIViewController {
         let label = UILabel()
         label.text = "У вас еще нет NFT"
         label.textAlignment = .center
-        label.font = .bodyRegular
-        label.textColor = .textSecondary
+        label.font = .bodyBold
+        label.textColor = .black
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -84,9 +84,8 @@ final class MyNFTsViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Мои NFT"
+        navigationItem.title = ""
         
-        // Кнопка сортировки
         let sortButton = UIBarButtonItem(
             image: UIImage(systemName: "arrow.up.arrow.down"),
             style: .plain,
@@ -96,12 +95,13 @@ final class MyNFTsViewController: UIViewController {
         sortButton.tintColor = .black
         navigationItem.rightBarButtonItem = sortButton
         
-        // Делаем navigation bar прозрачным
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
+        
     }
     
     private func bindViewModel() {
@@ -152,16 +152,16 @@ final class MyNFTsViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         
-        alert.addAction(UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
-            self?.viewModel.sortByName()
-        })
-        
         alert.addAction(UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
             self?.viewModel.sortByPrice()
         })
         
         alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
             self?.viewModel.sortByRating()
+        })
+        
+        alert.addAction(UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+            self?.viewModel.sortByName()
         })
         
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))

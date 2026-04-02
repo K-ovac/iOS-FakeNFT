@@ -63,7 +63,6 @@ final class NFTListServiceImpl: NFTListService {
     }
 }
 
-// Запрос для получения автора
 struct NFTAuthorRequest: NetworkRequest {
     let id: String
     

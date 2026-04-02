@@ -12,7 +12,7 @@ protocol ProfileEditViewModelProtocol: AnyObject {
     var onLoadingStateChange: ((Bool) -> Void)? { get set }
     var onError: ((String) -> Void)? { get set }
     
-    func saveProfile(_ profile: ProfileUpdate)
+    func saveProfile(_ profile: ProfileUpdate, profileId: String)
 }
 
 final class ProfileEditViewModel: ProfileEditViewModelProtocol {
@@ -24,26 +24,20 @@ final class ProfileEditViewModel: ProfileEditViewModelProtocol {
     
     init(profileService: ProfileService) {
         self.profileService = profileService
-        print("📦 ProfileEditViewModel initialized")
     }
     
-    func saveProfile(_ profile: ProfileUpdate) {
-        print("🔄 Saving profile...")
+    func saveProfile(_ profile: ProfileUpdate, profileId: String) {
         onLoadingStateChange?(true)
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.profileService.updateProfile(profile: profile) { result in
-                DispatchQueue.main.async {
-                    self?.onLoadingStateChange?(false)
-                    
-                    switch result {
-                    case .success:
-                        print("✅ Profile saved successfully")
-                        self?.onSaveSuccess?()
-                    case .failure(let error):
-                        print("❌ Profile save error: \(error)")
-                        self?.onError?(error.localizedDescription)
-                    }
+        profileService.updateProfile(id: profileId, profile: profile) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.onLoadingStateChange?(false)
+                
+                switch result {
+                case .success:
+                    self?.onSaveSuccess?()
+                case .failure(let error):
+                    self?.onError?(error.localizedDescription)
                 }
             }
         }

@@ -52,6 +52,13 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.keyboardDismissMode = .onDrag
+        return view
+    }()
+    
     // MARK: - Section Headers
     private lazy var myNFTsHeaderView: UIView = {
         let view = UIView()
@@ -82,7 +89,7 @@ final class ProfileViewController: UIViewController {
         
         let label = UILabel()
         label.text = NSLocalizedString("Profile.favorites", comment: "")
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold) // font-weight: 700, size: 17
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.textColor = .textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -242,6 +249,11 @@ final class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("📱 ProfileViewController viewDidAppear")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.fetchProfile()
     }
     
     // MARK: - Private Methods
