@@ -91,7 +91,8 @@ final class NftCollectionViewController: UIViewController {
         self.catalog = catalog
         self.nftCollectionViewModel = NftCollectionViewModel(
             nftCollectionService: servicesAssembly.collectionsService,
-            nftCollectionId: catalog.id
+            nftCollectionId: catalog.id,
+            profileService: servicesAssembly.profileService
         )
         super.init(nibName: nil, bundle: nil)
     }
@@ -220,6 +221,10 @@ final class NftCollectionViewController: UIViewController {
             self?.nftsCollectionView.reloadData()
         }
         
+        nftCollectionViewModel.onFavoritesUpdated = { [weak self] in
+            self?.nftsCollectionView.reloadData()
+        }
+        
         nftCollectionViewModel.onError = { [weak self] errorModel in
             self?.showError(errorModel)
         }
@@ -293,7 +298,12 @@ extension NftCollectionViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NftCollectionCell.reuseIdentifier, for: indexPath) as? NftCollectionCell else { return UICollectionViewCell() }
         
         let nft = nftCollectionViewModel.nft(at: indexPath.row)
-        cell.configure(with: nft)
+        cell.delegate = self
+        cell.configure(
+            with: nft,
+            isLiked: nftCollectionViewModel.isLiked(nftId: nft.id),
+            isInCart: false
+        )
         
         return cell
     }
@@ -303,6 +313,15 @@ extension NftCollectionViewController: UICollectionViewDataSource {
 
 // MARK: - Extension NftCollectionViewController: UICollectionViewDelegate
 
-extension NftCollectionViewController: UICollectionViewDelegate {
+extension NftCollectionViewController: NftCollectionCellDelegate {
+    func didTapFavoritesButton(on cell: NftCollectionCell) {
+        guard let indexPath = nftsCollectionView.indexPath(for: cell) else { return }
+        let nft = nftCollectionViewModel.nfts[indexPath.row]
+        
+        nftCollectionViewModel.toggleFavorite(nftId: nft.id)
+    }
     
+    func didTapCartButton(on cell: NftCollectionCell) {
+        print("tapped cart")
+    }
 }

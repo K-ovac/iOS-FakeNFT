@@ -8,11 +8,19 @@
 import UIKit
 import Kingfisher
 
+// MARK: - NftCollectionCellDelegate
+
+protocol NftCollectionCellDelegate: AnyObject {
+    func didTapFavoritesButton(on cell: NftCollectionCell)
+    func didTapCartButton(on cell: NftCollectionCell)
+}
+
 final class NftCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     static let reuseIdentifier = String(describing: NftCollectionCell.self)
+    weak var delegate: NftCollectionCellDelegate?
     
     // MARK: - UI Components
     
@@ -27,7 +35,6 @@ final class NftCollectionCell: UICollectionViewCell {
     
     private lazy var favoritesButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "inFavorites"), for: .normal) //delete
         button.tintColor = .white   //value
         
         return button
@@ -60,7 +67,6 @@ final class NftCollectionCell: UICollectionViewCell {
     
     private lazy var cartButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "addToCart"), for: .normal) //delete
         button.tintColor = .black   //value
         
         return button
@@ -144,16 +150,18 @@ final class NftCollectionCell: UICollectionViewCell {
     // MARK: Actions
     
     @objc private func didTapFavoritesButton() {
-        print("tapped")
+        print("Favotites tapped")
+        delegate?.didTapFavoritesButton(on: self)
     }
     
     @objc private func didTapAddToCartButton() {
-        print("tapped")
+        print("Cart tapped")
+        delegate?.didTapCartButton(on: self)
     }
     
     // MARK: - Configure Cell
     
-    func configure(with nftCard: NFT) {
+    func configure(with nftCard: NFT, isLiked: Bool, isInCart: Bool) {
         if let url = URL(string: nftCard.images[0]) {
             nftImageView.kf.setImage(with: url) { [weak self] _ in
                 self?.setNeedsLayout()
@@ -162,5 +170,11 @@ final class NftCollectionCell: UICollectionViewCell {
 
         nftNameLabel.text = nftCard.name
         nftPriceLabel.text = String(nftCard.price) + " " + "ETH"
+                
+        let favoritesButtonImage = isLiked ? UIImage(named: "inFavorites") : UIImage(named: "notInFavorites")
+        let cartButtonImage = isInCart ? UIImage(named: "addToCart") : UIImage(named: "removeFromCart")
+        
+        favoritesButton.setImage(favoritesButtonImage, for: .normal)
+        cartButton.setImage(cartButtonImage, for: .normal)
     }
 }

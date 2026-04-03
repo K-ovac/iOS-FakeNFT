@@ -27,11 +27,13 @@ final class NftCollectionViewModel {
     var onLoadingStarted: (() -> Void)?
     var onLoadingStopped: (() -> Void)?
     var onNftsFetched: (() -> Void)?
+    var onFavoritesUpdated: (() -> Void)?
     
     // MARK: - Properties
     
     private var nftCollectionService: CollectionsService
     private let nftCollectionId: String
+    private var profileService: ProfileService
     
     private var state: NftCollectionState = .initial {
         didSet {
@@ -50,17 +52,25 @@ final class NftCollectionViewModel {
         }
     }
     
+    private var likedNftIds: [String] = []
+    
     //MARK: - Init
     
-    init(nftCollectionService: CollectionsService, nftCollectionId: String) {
+    init(nftCollectionService: CollectionsService, nftCollectionId: String, profileService: ProfileService) {
         self.nftCollectionService = nftCollectionService
         self.nftCollectionId = nftCollectionId
+        self.profileService = profileService
     }
     
     // MARK: - Fetch NFT Collection
     
     func fetchNftCollectionInfo() {
         state = .loading
+        
+        let group = DispatchGroup()
+        var loadedCollection: Catalog?
+        var loadedLikes: [String] = []
+        
         nftCollectionService.fetchNftCollection(id: nftCollectionId) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -71,6 +81,29 @@ final class NftCollectionViewModel {
                     print(error)
                     self?.state = .failed(error)
                 }
+            }
+        }
+        
+        group.enter()
+        nftCollectionService.fetchNftCollection(id: nftCollectionId) { result in
+            if case .success(let collection) = result {
+                loadedCollection = collection
+            }
+            group.leave()
+        }
+        
+        group.enter()
+        profileService.loadProfile { result in
+            if case .success(let profile) = result {
+                loadedLikes = profile.likes
+            }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.likedNftIds = loadedLikes
+            if let collection = loadedCollection {
+                self?.state = .data(collection)
             }
         }
     }
@@ -86,7 +119,6 @@ final class NftCollectionViewModel {
         case .data(let collection):
             nftCollection = collection
             fetchNfts(nftsId: collection.nfts)
-            onLoadingStopped?()
         case .failed(let error):
             let errorModel = makeErrorModel(error)
             onLoadingStopped?()
@@ -114,7 +146,7 @@ final class NftCollectionViewModel {
 
 extension NftCollectionViewModel {
     
-    // MARK: - Factory Mathods
+    // MARK: - Factory Methods
     
     func numberOfNfts() -> Int {
         return nfts.count
@@ -129,7 +161,6 @@ extension NftCollectionViewModel {
     func fetchNfts(nftsId: [String]) {
         let dispatchGroup = DispatchGroup()
         var fetchedNfts: [NFT] = []
-        
         
         nftsId.forEach { nftId in
             dispatchGroup.enter()
@@ -150,6 +181,36 @@ extension NftCollectionViewModel {
         
         dispatchGroup.notify(queue: .main) { [weak self] in
             self?.nfts = fetchedNfts
+            self?.onLoadingStopped?()
         }
+    }
+    
+    func toggleFavorite(nftId: String) {
+        if likedNftIds.contains(nftId) {
+            likedNftIds.removeAll { $0 == nftId }
+        } else {
+            likedNftIds.append(nftId)
+        }
+        onFavoritesUpdated?()
+        
+        profileService.loadProfile { [weak self] result in
+            guard let self else { return }
+            if case .success(let profile) = result {
+                let updatedProfile = ProfileUpdate(
+                    name: profile.name,
+                    avatar: profile.avatar,
+                    description: profile.description ?? "",
+                    website: profile.website,
+                    likes: self.likedNftIds,
+                    nfts: profile.nfts
+                )
+                self.profileService.updateProfile(id: profile.id, profile: updatedProfile) { _ in }
+            }
+        }
+        onNftCollectionFetched?()
+    }
+
+    func isLiked(nftId: String) -> Bool {
+        likedNftIds.contains(nftId)
     }
 }
