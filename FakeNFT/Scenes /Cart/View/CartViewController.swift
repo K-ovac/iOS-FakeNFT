@@ -18,9 +18,7 @@ final class CartViewController: UIViewController {
     private let sortButton = UIButton(type: .system)
     private let emptyStateView = UIView()
     private let emptyStateLabel = UILabel()
-    
     private var items: [CartItem] = []
-    
     
     init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
@@ -101,8 +99,6 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupEmptyStateView()
     }
-    
-    
 }
 
 extension CartViewController: UITableViewDataSource {
@@ -119,10 +115,9 @@ extension CartViewController: UITableViewDataSource {
         cell.configure(with: item)
         return cell
     }
-    
-    
 }
 
+//TODO:
 extension CartViewController: UITableViewDelegate {
     
 }

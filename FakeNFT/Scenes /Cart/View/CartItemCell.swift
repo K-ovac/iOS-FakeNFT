@@ -21,6 +21,8 @@ final class CartItemCell: UITableViewCell {
     private func setupUI() {
         setupNftImageView()
         setupCartItemInfoView()
+        setupCartItemInfoViewLabels()
+        setupCartItemInfoViewRating()
         setupDeleteButton()
     }
     
@@ -53,8 +55,6 @@ final class CartItemCell: UITableViewCell {
     }
     
     private func loadImage(from url: URL?) {
-        nftImageView.image = UIImage(systemName: "photo")
-
         guard let url else { return }
 
         URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
@@ -97,20 +97,33 @@ extension CartItemCell {
         ])
     }
     
-    private func setupCartItemInfoView() {
-        contentView.addSubview(cartItemInfoView)
-        cartItemInfoView.addSubview(nameLabel)
-        cartItemInfoView.addSubview(ratingStackView)
-        cartItemInfoView.addSubview(priceLabel)
-        cartItemInfoView.addSubview(priceTitleLabel)
-        
-        cartItemInfoView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupCartItemInfoViewLabels() {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingStackView.translatesAutoresizingMaskIntoConstraints = false
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         priceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         nameLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        priceTitleLabel.text = NSLocalizedString("cartCell.info.priceTitle", comment: "")
+        priceTitleLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        
+        priceLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
+            nameLabel.topAnchor.constraint(equalTo: cartItemInfoView.topAnchor),
+            
+            priceTitleLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
+            priceTitleLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
+            
+            priceLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
+            priceLabel.topAnchor.constraint(equalTo: priceTitleLabel.bottomAnchor, constant: 2),
+        ])
+
+    }
+    
+    private func setupCartItemInfoViewRating() {
+        ratingStackView.translatesAutoresizingMaskIntoConstraints = false
         
         ratingStackView.axis = .horizontal
         ratingStackView.spacing = 2
@@ -127,31 +140,28 @@ extension CartItemCell {
             ratingStackView.addArrangedSubview(imageView)
         }
         
-        priceTitleLabel.text = NSLocalizedString("cartCell.info.priceTitle", comment: "")
-        priceTitleLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        NSLayoutConstraint.activate([
+            ratingStackView.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
+            ratingStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
+        ])
+    }
+    
+    private func setupCartItemInfoView() {
+        contentView.addSubview(cartItemInfoView)
+        cartItemInfoView.addSubview(nameLabel)
+        cartItemInfoView.addSubview(priceLabel)
+        cartItemInfoView.addSubview(priceTitleLabel)
+        cartItemInfoView.addSubview(ratingStackView)
         
-        priceLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        cartItemInfoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             cartItemInfoView.widthAnchor.constraint(equalToConstant: 76),
             cartItemInfoView.heightAnchor.constraint(equalToConstant: 92),
             cartItemInfoView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
             cartItemInfoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            cartItemInfoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
-            
-            nameLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            nameLabel.topAnchor.constraint(equalTo: cartItemInfoView.topAnchor),
-            
-            ratingStackView.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            ratingStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
-            
-            priceTitleLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            priceTitleLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
-            
-            priceLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            priceLabel.topAnchor.constraint(equalTo: priceTitleLabel.bottomAnchor, constant: 2),
-            
+            cartItemInfoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
     }
     
