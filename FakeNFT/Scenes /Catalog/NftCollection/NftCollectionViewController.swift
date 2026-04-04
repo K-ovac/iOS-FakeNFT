@@ -222,10 +222,12 @@ final class NftCollectionViewController: UIViewController {
         }
         
         nftCollectionViewModel.onFavoritesUpdated = { [weak self] in
+            UIBlockingProgressHUD.dismiss()
             self?.nftsCollectionView.reloadData()
         }
         
         nftCollectionViewModel.onCartUpdated = { [weak self] in
+            UIBlockingProgressHUD.dismiss()
             self?.nftsCollectionView.reloadData()
         }
         
@@ -320,6 +322,7 @@ extension NftCollectionViewController: NftCollectionCellDelegate {
         guard let indexPath = nftsCollectionView.indexPath(for: cell) else { return }
         let nft = nftCollectionViewModel.nfts[indexPath.row]
         
+        UIBlockingProgressHUD.show()
         nftCollectionViewModel.toggleFavorite(nftId: nft.id)
     }
     
@@ -327,6 +330,7 @@ extension NftCollectionViewController: NftCollectionCellDelegate {
         guard let indexPath = nftsCollectionView.indexPath(for: cell) else { return }
         let nft = nftCollectionViewModel.nfts[indexPath.row]
         
+        UIBlockingProgressHUD.show()
         nftCollectionViewModel.toggleCart(nftId: nft.id)
     }
 }

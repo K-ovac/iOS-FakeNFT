@@ -128,6 +128,7 @@
 		46CB61F62F74A45C00FF46E7 /* NftCollection */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NftCollection; sourceTree = "<group>"; };
 		46CF6F012F80492A00768FA5 /* Profile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Profile; sourceTree = "<group>"; };
 		46CF6F392F81691700768FA5 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
+		46CF6F812F81A49A00768FA5 /* UIBlockingProgressHUD */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = UIBlockingProgressHUD; sourceTree = "<group>"; };
 		46E711112F7337D3007A035B /* docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = docs; sourceTree = "<group>"; };
 		46E711182F734449007A035B /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -298,6 +299,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				46CF6F812F81A49A00768FA5 /* UIBlockingProgressHUD */,
 				46CF6F392F81691700768FA5 /* Cart */,
 				46CF6F012F80492A00768FA5 /* Profile */,
 				466DEB742F7917D8000DBDC8 /* WebView */,
@@ -414,6 +416,7 @@
 				46CB61F62F74A45C00FF46E7 /* NftCollection */,
 				46CF6F012F80492A00768FA5 /* Profile */,
 				46CF6F392F81691700768FA5 /* Cart */,
+				46CF6F812F81A49A00768FA5 /* UIBlockingProgressHUD */,
 				46E711112F7337D3007A035B /* docs */,
 				46E711182F734449007A035B /* Services */,
 			);
