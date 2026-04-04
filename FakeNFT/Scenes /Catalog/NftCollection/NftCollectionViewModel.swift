@@ -28,11 +28,11 @@ final class NftCollectionViewModel {
     var onLoadingStopped: (() -> Void)?
     var onNftsFetched: (() -> Void)?
     var onFavoritesUpdated: (() -> Void)?
+    var onCartUpdated: (() -> Void)?
     
     // MARK: - Properties
     
     private var nftCollectionService: CollectionsService
-    private let nftCollectionId: String
     private var profileService: ProfileService
     
     private var state: NftCollectionState = .initial {
@@ -52,7 +52,9 @@ final class NftCollectionViewModel {
         }
     }
     
+    private let nftCollectionId: String
     private var likedNftIds: [String] = []
+    private var cartNftIds: [String] = []
     
     //MARK: - Init
     
@@ -70,6 +72,7 @@ final class NftCollectionViewModel {
         let group = DispatchGroup()
         var loadedCollection: Catalog?
         var loadedLikes: [String] = []
+        var loadedCart: [String] = []
         
         nftCollectionService.fetchNftCollection(id: nftCollectionId) { [weak self] result in
             DispatchQueue.main.async {
@@ -100,8 +103,17 @@ final class NftCollectionViewModel {
             group.leave()
         }
         
+        group.enter()
+        nftCollectionService.loadOrder { result in
+            if case .success(let order) = result {
+                loadedCart = order.nfts
+            }
+            group.leave()
+        }
+
         group.notify(queue: .main) { [weak self] in
             self?.likedNftIds = loadedLikes
+            self?.cartNftIds = loadedCart
             if let collection = loadedCollection {
                 self?.state = .data(collection)
             }
@@ -142,14 +154,14 @@ final class NftCollectionViewModel {
     }
 }
 
-//MARK: - Extension NftCollectionViewModel for Nfts
+//MARK: - Extension NftCollectionViewModel for Nft Card
 
 extension NftCollectionViewModel {
     
     // MARK: - Factory Methods
     
     func numberOfNfts() -> Int {
-        return nfts.count
+        nfts.count
     }
     
     func nft(at index: Int) -> NFT {
@@ -158,7 +170,7 @@ extension NftCollectionViewModel {
     
     // MARK: - Fetch nfts
     
-    func fetchNfts(nftsId: [String]) {
+    private func fetchNfts(nftsId: [String]) {
         let dispatchGroup = DispatchGroup()
         var fetchedNfts: [NFT] = []
         
@@ -185,6 +197,8 @@ extension NftCollectionViewModel {
         }
     }
     
+    // MARK: Favorite Button Methods
+    
     func toggleFavorite(nftId: String) {
         if likedNftIds.contains(nftId) {
             likedNftIds.removeAll { $0 == nftId }
@@ -209,8 +223,36 @@ extension NftCollectionViewModel {
         }
         onNftCollectionFetched?()
     }
-
+    
     func isLiked(nftId: String) -> Bool {
         likedNftIds.contains(nftId)
+    }
+    
+    // MARK: - Cart Button Methods
+    
+    func toggleCart(nftId: String) {
+        if cartNftIds.contains(nftId) {
+            cartNftIds.removeAll { $0 == nftId }
+        } else {
+            cartNftIds.append(nftId)
+        }
+        onCartUpdated?()
+        
+        nftCollectionService.updateOrder(nfts: cartNftIds) { [weak self] result in
+            if case .failure = result {
+                if self?.cartNftIds.contains(nftId) == true {
+                    self?.cartNftIds.removeAll { $0 == nftId }
+                } else {
+                    self?.cartNftIds.append(nftId)
+                }
+                DispatchQueue.main.async {
+                    self?.onCartUpdated?()
+                }
+            }
+        }
+    }
+    
+    func isInCart(nftId: String) -> Bool {
+        cartNftIds.contains(nftId)
     }
 }

@@ -225,6 +225,10 @@ final class NftCollectionViewController: UIViewController {
             self?.nftsCollectionView.reloadData()
         }
         
+        nftCollectionViewModel.onCartUpdated = { [weak self] in
+            self?.nftsCollectionView.reloadData()
+        }
+        
         nftCollectionViewModel.onError = { [weak self] errorModel in
             self?.showError(errorModel)
         }
@@ -302,13 +306,11 @@ extension NftCollectionViewController: UICollectionViewDataSource {
         cell.configure(
             with: nft,
             isLiked: nftCollectionViewModel.isLiked(nftId: nft.id),
-            isInCart: false
+            isInCart: nftCollectionViewModel.isInCart(nftId: nft.id)
         )
         
         return cell
     }
-    
-    
 }
 
 // MARK: - Extension NftCollectionViewController: UICollectionViewDelegate
@@ -322,6 +324,9 @@ extension NftCollectionViewController: NftCollectionCellDelegate {
     }
     
     func didTapCartButton(on cell: NftCollectionCell) {
-        print("tapped cart")
+        guard let indexPath = nftsCollectionView.indexPath(for: cell) else { return }
+        let nft = nftCollectionViewModel.nfts[indexPath.row]
+        
+        nftCollectionViewModel.toggleCart(nftId: nft.id)
     }
 }

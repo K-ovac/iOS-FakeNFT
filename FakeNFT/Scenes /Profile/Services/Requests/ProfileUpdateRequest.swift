@@ -14,9 +14,7 @@ struct ProfileUpdateRequest: NetworkRequest {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
     
-    var httpMethod: HttpMethod {
-        .put
-    }
+    var httpMethod: HttpMethod { .put }
     
     var dto: Dto? {
         ProfileUpdateDto(profile: profile)

@@ -98,7 +98,7 @@ final class NftCollectionCell: UICollectionViewCell {
     // MARK: - Setup Layout
     
     private func setupLayout() {
-        [nftImageView, nftRatingImageView, nftNameLabel, nftPriceLabel, cartButton, favoritesButton].forEach {
+        [nftImageView, favoritesButton, nftRatingImageView, nftNameLabel, nftPriceLabel, cartButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -172,7 +172,7 @@ final class NftCollectionCell: UICollectionViewCell {
         nftPriceLabel.text = String(nftCard.price) + " " + "ETH"
                 
         let favoritesButtonImage = isLiked ? UIImage(named: "inFavorites") : UIImage(named: "notInFavorites")
-        let cartButtonImage = isInCart ? UIImage(named: "addToCart") : UIImage(named: "removeFromCart")
+        let cartButtonImage = isInCart ? UIImage(named: "removeFromСart") : UIImage(named: "addToCart")
         
         favoritesButton.setImage(favoritesButtonImage, for: .normal)
         cartButton.setImage(cartButtonImage, for: .normal)
