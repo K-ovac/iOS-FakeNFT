@@ -13,6 +13,7 @@ final class NftCollectionViewController: UIViewController {
     
     private let catalog: Catalog
     private var nftCollectionViewModel: NftCollectionViewModel
+    private var nftsCollectionViewHeightConstraint: NSLayoutConstraint?
     
     // MARK: - UI Components
     
@@ -81,8 +82,26 @@ final class NftCollectionViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .clear
         collectionView.alwaysBounceVertical = true
+        collectionView.isScrollEnabled = false
         
         return collectionView
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .clear
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
+        
+        return scrollView
+    }()
+
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        return view
     }()
     
     // MARK: - Init
@@ -115,6 +134,10 @@ final class NftCollectionViewController: UIViewController {
     // MARK: - Configure UI
     
     private func configureNavBar() {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        
         let backButton = UIBarButtonItem(
             image: Images.back,
             style: .plain,
@@ -127,11 +150,16 @@ final class NftCollectionViewController: UIViewController {
     
     private func configureView() {
         view.backgroundColor = .background
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, nftsCollectionView].forEach {
-            view.addSubview($0)
+        view.addSubview(scrollView)
+        view.addSubview(loadingIndicator)
+        
+        scrollView.addSubview(contentView)
+        
+        [nftImageView, nftNameLabel, authorLabel,
+         authorLinkButton, descriptionLabel, nftsCollectionView].forEach {
+            contentView.addSubview($0)
             $0.isHidden = true
         }
-        view.addSubview(loadingIndicator)
         
         configureNftsCollectionView()
         setupLayout()
@@ -146,46 +174,71 @@ final class NftCollectionViewController: UIViewController {
     // MARK: - Setup LAyout
     
     private func setupLayout() {
-        [nftImageView, nftNameLabel, authorLabel, authorLinkButton, descriptionLabel, loadingIndicator, nftsCollectionView].forEach {
-            ($0).translatesAutoresizingMaskIntoConstraints = false
+        [scrollView, contentView, nftImageView, nftNameLabel,
+         authorLabel, authorLinkButton, descriptionLabel,
+         loadingIndicator, nftsCollectionView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            nftImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            nftImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            nftImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            nftImageView.bottomAnchor.constraint(equalTo: nftNameLabel.topAnchor, constant: -Metrics.Spacing.medium),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             nftImageView.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCollectionImageHeight)
         ])
+        
         NSLayoutConstraint.activate([
             nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor, constant: Metrics.Spacing.medium),
             nftNameLabel.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -Metrics.Spacing.medium),
             nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.medium),
         ])
+        
         NSLayoutConstraint.activate([
             authorLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: authorLinkButton.leadingAnchor, constant: -Metrics.Spacing.verySmall),
             authorLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: Metrics.Spacing.smallLarge),
         ])
+        
         NSLayoutConstraint.activate([
             authorLinkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: Metrics.Spacing.verySmall),
             authorLinkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor)
         ])
+        
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: nftNameLabel.trailingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: Metrics.Spacing.spacing5)
         ])
+        
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
+        let heightConstraint = nftsCollectionView.heightAnchor.constraint(equalToConstant: 0)
+        heightConstraint.isActive = true
+        nftsCollectionViewHeightConstraint = heightConstraint
+        
         NSLayoutConstraint.activate([
             nftsCollectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
-            nftsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            nftsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            nftsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            nftsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nftsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            nftsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     
@@ -219,6 +272,8 @@ final class NftCollectionViewController: UIViewController {
         
         nftCollectionViewModel.onNftsFetched = { [weak self] in
             self?.nftsCollectionView.reloadData()
+            self?.nftsCollectionView.layoutIfNeeded()
+            self?.nftsCollectionViewHeightConstraint?.constant = self?.nftsCollectionView.contentSize.height ?? 0
         }
         
         nftCollectionViewModel.onFavoritesUpdated = { [weak self] in
