@@ -23,7 +23,6 @@ struct NFTAuthor: Decodable {
     let id: String
 }
 
-// Модель для отображения в списке
 struct NFTDisplayModel {
     let id: String
     let name: String

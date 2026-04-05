@@ -62,7 +62,7 @@ final class FavoritesNFTCollectionViewCell: UICollectionViewCell {
     
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Цена"
+        label.text = LocalizableKeys.priceTitle
         label.font = .caption1
         label.textColor = .textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,9 +82,17 @@ final class FavoritesNFTCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+    
     // MARK: - Setup
     private func setupUI() {
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .cardBackground
         
         contentView.addSubview(imageView)
         contentView.addSubview(likeButton)
@@ -125,6 +133,13 @@ final class FavoritesNFTCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    private func updateColors() {
+        contentView.backgroundColor = .cardBackground
+        nameLabel.textColor = .textPrimary
+        priceLabel.textColor = .textPrimary
+        priceTitleLabel.textColor = .textSecondary
+    }
+    
     // MARK: - Configuration
     func configure(with nft: FavoritesNFTDisplayModel, delegate: FavoritesNFTCollectionViewCellDelegate?) {
         self.currentNFTId = nft.id
@@ -152,10 +167,10 @@ final class FavoritesNFTCollectionViewCell: UICollectionViewCell {
             
             if i < rating {
                 starImageView.image = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysTemplate)
-                starImageView.tintColor = .systemYellow
+                starImageView.tintColor = .ratingStarFilled
             } else {
                 starImageView.image = UIImage(systemName: "star")
-                starImageView.tintColor = .lightGray
+                starImageView.tintColor = .ratingStarEmpty
             }
             
             ratingStackView.addArrangedSubview(starImageView)

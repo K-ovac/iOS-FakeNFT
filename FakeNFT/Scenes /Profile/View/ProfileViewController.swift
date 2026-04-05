@@ -66,7 +66,7 @@ final class ProfileViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = NSLocalizedString("Profile.myNft", comment: "")
+        label.text = LocalizableKeys.profileMyNft
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.textColor = .textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +88,7 @@ final class ProfileViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = NSLocalizedString("Profile.favorites", comment: "")
+        label.text = LocalizableKeys.profileFavorites
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.textColor = .textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -116,7 +116,7 @@ final class ProfileViewController: UIViewController {
         button.addSubview(containerView)
         
         let titleLabel = UILabel()
-        titleLabel.text = NSLocalizedString("Profile.myNft", comment: "")
+        titleLabel.text = LocalizableKeys.profileMyNft
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         titleLabel.textColor = .textPrimary
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -130,7 +130,7 @@ final class ProfileViewController: UIViewController {
         
         let arrowImageView = UIImageView()
         arrowImageView.image = UIImage(systemName: "chevron.right")
-        arrowImageView.tintColor = .black
+        arrowImageView.tintColor = .navigationBarTint
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(arrowImageView)
         
@@ -170,7 +170,7 @@ final class ProfileViewController: UIViewController {
         button.addSubview(containerView)
         
         let titleLabel = UILabel()
-        titleLabel.text = NSLocalizedString("Profile.favorites", comment: "")
+        titleLabel.text = LocalizableKeys.profileFavorites
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         titleLabel.textColor = .textPrimary
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -184,7 +184,7 @@ final class ProfileViewController: UIViewController {
         
         let arrowImageView = UIImageView()
         arrowImageView.image = UIImage(systemName: "chevron.right")
-        arrowImageView.tintColor = .black
+        arrowImageView.tintColor = .navigationBarTint
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(arrowImageView)
         
@@ -256,6 +256,14 @@ final class ProfileViewController: UIViewController {
         viewModel.fetchProfile()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+    
     // MARK: - Private Methods
     private func setupUI() {
         view.backgroundColor = .background
@@ -310,7 +318,7 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(editTapped)
         )
-        editButton.tintColor = .black
+        editButton.tintColor = .navigationBarTint
         navigationItem.rightBarButtonItem = editButton
         
         let appearance = UINavigationBarAppearance()
@@ -318,6 +326,24 @@ final class ProfileViewController: UIViewController {
         appearance.backgroundColor = .clear
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.tintColor = .navigationBarTint
+    }
+    
+    private func updateColors() {
+        view.backgroundColor = .background
+        nameLabel.textColor = .textPrimary
+        descriptionLabel.textColor = .textPrimary
+        myNFTsTitleLabel?.textColor = .textPrimary
+        myNFTsCountLabel?.textColor = .textPrimary
+        favoritesTitleLabel?.textColor = .textPrimary
+        favoritesCountLabel?.textColor = .textPrimary
+        
+        if let myNFTsButton = myNFTsButton.subviews.first?.subviews.last as? UIImageView {
+            myNFTsButton.tintColor = .navigationBarTint
+        }
+        if let favoritesButton = favoritesButton.subviews.first?.subviews.last as? UIImageView {
+            favoritesButton.tintColor = .navigationBarTint
+        }
     }
     
     private func bindViewModel() {
@@ -369,16 +395,16 @@ final class ProfileViewController: UIViewController {
         }
         
         let alert = UIAlertController(
-            title: NSLocalizedString("Error.title", comment: ""),
+            title: LocalizableKeys.errorTitle,
             message: message,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Error.repeat", comment: ""), style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorRepeat, style: .default) { [weak self] _ in
             self?.viewModel.fetchProfile()
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorCancel, style: .cancel))
         
         present(alert, animated: true)
     }
