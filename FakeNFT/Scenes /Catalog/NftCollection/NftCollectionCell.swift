@@ -62,7 +62,12 @@ final class NftCollectionCell: UICollectionViewCell {
     }()
     
     private lazy var favoritesButton = UIButton()
-    private lazy var cartButton = UIButton()
+    private lazy var cartButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .primaryForeground
+        
+        return button
+    }()
     
     // MARK: - Init
     
@@ -193,8 +198,8 @@ final class NftCollectionCell: UICollectionViewCell {
         
         configureNftRatingStackView(with: nftCard.rating)
                 
-        let favoritesButtonImage = isLiked ? Images.inFavorites : Images.notInFavorites
-        let cartButtonImage = isInCart ? Images.removeFromCart : Images.addToCart
+        let favoritesButtonImage = (isLiked ? Images.inFavorites : Images.notInFavorites)?.withRenderingMode(.alwaysOriginal)
+        let cartButtonImage = (isInCart ? Images.removeFromCart : Images.addToCart)?.withRenderingMode(.alwaysTemplate)
         
         favoritesButton.setImage(favoritesButtonImage, for: .normal)
         cartButton.setImage(cartButtonImage, for: .normal)
