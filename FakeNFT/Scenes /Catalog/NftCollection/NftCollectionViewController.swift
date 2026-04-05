@@ -104,6 +104,18 @@ final class NftCollectionViewController: UIViewController {
         return view
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .primaryForeground
+        refreshControl.attributedTitle = NSAttributedString(
+            string: NSLocalizedString("RefreshControl.title", comment: "")
+        )
+        
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
+        return refreshControl
+    }()
+    
     // MARK: - Init
     
     init(catalog: Catalog, servicesAssembly: ServicesAssembly) {
@@ -163,6 +175,7 @@ final class NftCollectionViewController: UIViewController {
         
         configureNftsCollectionView()
         setupLayout()
+        scrollView.refreshControl = refreshControl
     }
     
     private func uiVisibility() {
@@ -271,6 +284,7 @@ final class NftCollectionViewController: UIViewController {
         }
         
         nftCollectionViewModel.onNftsFetched = { [weak self] in
+            self?.refreshControl.endRefreshing()
             self?.nftsCollectionView.reloadData()
             self?.nftsCollectionView.layoutIfNeeded()
             self?.nftsCollectionViewHeightConstraint?.constant = self?.nftsCollectionView.contentSize.height ?? 0
@@ -307,6 +321,11 @@ final class NftCollectionViewController: UIViewController {
         let vc = AuthorWebViewController(url: AuthorWebRequestConstant.authorURL)
         navigationController?.pushViewController(vc, animated: true)
         print("Author \(catalog.author), website: \(catalog.website)")
+    }
+    
+    @objc private func refreshData() {
+        nftCollectionViewModel.fetchNftCollectionInfo()
+        print("Обновлены данные NFT коллекции ", catalog.name)
     }
 }
 

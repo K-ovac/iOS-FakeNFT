@@ -127,6 +127,7 @@ final class CatalogViewController: UIViewController {
     
     @objc private func refreshData() {
         catalogViewModel.fetchNftCollections()
+        print("Обновлены данные таблицы каталога NFT")
     }
     
     // MARK: - Sort Alert
@@ -167,7 +168,6 @@ final class CatalogViewController: UIViewController {
         catalogViewModel.onFetchedNftCollection = { [weak self] in
             self?.catalogTableView.reloadData()
             self?.refreshControl.endRefreshing()
-            print("Обновлены данные таблицы каталога NFT")
         }
         
         catalogViewModel.onSelectedNftCollection = { [weak self] catalog in
