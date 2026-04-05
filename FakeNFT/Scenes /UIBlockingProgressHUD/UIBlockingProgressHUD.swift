@@ -8,6 +8,8 @@
 import UIKit
 import ProgressHUD
 
+// MARK: - UIBlockingProgressHUD
+
 final class UIBlockingProgressHUD {
     private static var window: UIWindow? {
         UIApplication.shared
@@ -17,12 +19,16 @@ final class UIBlockingProgressHUD {
             .first { $0.isKeyWindow }
     }
     
+    // MARK: - Show ProgressHUD Method
+    
     static func show() {
         DispatchQueue.main.async {
             window?.isUserInteractionEnabled = false
             ProgressHUD.show()
         }
     }
+    
+    // MARK: - Dismiss ProgressHUD Method
     
     static func dismiss() {
         DispatchQueue.main.async {

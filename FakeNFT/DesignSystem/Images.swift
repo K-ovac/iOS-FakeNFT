@@ -10,6 +10,12 @@ import UIKit
 enum Images {
     static let sort = UIImage(named: "sort")
     static let back = UIImage(named: "back")
+    static let star = UIImage(named: "star")
+    static let starFill = UIImage(named: "starFill")
+    static let inFavorites = UIImage(named: "inFavorites")
+    static let notInFavorites = UIImage(named: "notInFavorites")
+    static let addToCart = UIImage(named: "addToCart")
+    static let removeFromCart = UIImage(named: "removeFromСart")
     
     static let profileIcon = UIImage(named: "profileIcon")
     static let catalogIcon = UIImage(named: "catalogIcon")

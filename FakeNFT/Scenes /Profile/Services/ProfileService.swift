@@ -7,13 +7,19 @@
 
 import Foundation
 
+// MARK: - Aliases Completion
+
 typealias ProfileCompletion = (Result<Profile, Error>) -> Void
 typealias ProfileUpdateCompletion = (Result<Profile, Error>) -> Void
+
+// MARK: - Protocol Profile Service
 
 protocol ProfileService {
     func loadProfile(completion: @escaping ProfileCompletion)
     func updateProfile(id: String, profile: ProfileUpdate, completion: @escaping ProfileUpdateCompletion)
 }
+
+// MARK: - ProfileServiceImpl: ProfileService
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient

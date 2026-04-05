@@ -71,19 +71,19 @@ final class CatalogCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Metrics.Spacing.verySmall),
-            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metrics.Spacing.medium),
-            nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metrics.Spacing.medium),
-            nftImageView.bottomAnchor.constraint(equalTo: nftNameLabel.topAnchor, constant: -Metrics.Spacing.verySmall)
+            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Metrics.Spacing.spacing4),
+            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metrics.Spacing.spacing16),
+            nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metrics.Spacing.spacing16),
+            nftImageView.bottomAnchor.constraint(equalTo: nftNameLabel.topAnchor, constant: -Metrics.Spacing.spacing4)
         ])
         NSLayoutConstraint.activate([
             nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor),
-            nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.verySmall),
-            nftNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metrics.Spacing.mediumLarge)
+            nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.spacing4),
+            nftNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metrics.Spacing.spacing17)
         ])
         NSLayoutConstraint.activate([
             nftCountLabel.centerYAnchor.constraint(equalTo: nftNameLabel.centerYAnchor),
-            nftCountLabel.leadingAnchor.constraint(equalTo: nftNameLabel.trailingAnchor, constant: Metrics.Spacing.verySmall),
+            nftCountLabel.leadingAnchor.constraint(equalTo: nftNameLabel.trailingAnchor, constant: Metrics.Spacing.spacing4),
         ])
     }
     

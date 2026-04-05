@@ -105,7 +105,7 @@ final class CatalogViewController: UIViewController {
     
     private func configureCategoryTableView() {
         catalogTableView.backgroundColor = .clear
-        catalogTableView.contentInset = UIEdgeInsets(top: Metrics.Spacing.medium, left: 0, bottom: 0, right: 0)
+        catalogTableView.contentInset = UIEdgeInsets(top: Metrics.Spacing.spacing16, left: Metrics.Spacing.spacing0, bottom: Metrics.Spacing.spacing0, right: Metrics.Spacing.spacing0)
         catalogTableView.separatorStyle = .none
         
         catalogTableView.delegate = self

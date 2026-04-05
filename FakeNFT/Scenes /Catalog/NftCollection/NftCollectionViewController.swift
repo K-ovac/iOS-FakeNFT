@@ -216,19 +216,19 @@ final class NftCollectionViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor, constant: Metrics.Spacing.medium),
-            nftNameLabel.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -Metrics.Spacing.medium),
-            nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.medium),
+            nftNameLabel.leadingAnchor.constraint(equalTo: nftImageView.leadingAnchor, constant: Metrics.Spacing.spacing16),
+            nftNameLabel.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -Metrics.Spacing.spacing16),
+            nftNameLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.spacing16),
         ])
         
         NSLayoutConstraint.activate([
             authorLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
-            authorLabel.trailingAnchor.constraint(equalTo: authorLinkButton.leadingAnchor, constant: -Metrics.Spacing.verySmall),
-            authorLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: Metrics.Spacing.smallLarge),
+            authorLabel.trailingAnchor.constraint(equalTo: authorLinkButton.leadingAnchor, constant: -Metrics.Spacing.spacing4),
+            authorLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: Metrics.Spacing.spacing13),
         ])
         
         NSLayoutConstraint.activate([
-            authorLinkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: Metrics.Spacing.verySmall),
+            authorLinkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: Metrics.Spacing.spacing4),
             authorLinkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor)
         ])
         
@@ -243,7 +243,7 @@ final class NftCollectionViewController: UIViewController {
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
-        let heightConstraint = nftsCollectionView.heightAnchor.constraint(equalToConstant: 0)
+        let heightConstraint = nftsCollectionView.heightAnchor.constraint(equalToConstant: Metrics.Sizes.size0)
         heightConstraint.isActive = true
         nftsCollectionViewHeightConstraint = heightConstraint
         
@@ -287,7 +287,7 @@ final class NftCollectionViewController: UIViewController {
             self?.refreshControl.endRefreshing()
             self?.nftsCollectionView.reloadData()
             self?.nftsCollectionView.layoutIfNeeded()
-            self?.nftsCollectionViewHeightConstraint?.constant = self?.nftsCollectionView.contentSize.height ?? 0
+            self?.nftsCollectionViewHeightConstraint?.constant = self?.nftsCollectionView.contentSize.height ?? Metrics.Sizes.size0
         }
         
         nftCollectionViewModel.onFavoritesUpdated = { [weak self] in
@@ -345,25 +345,25 @@ extension NftCollectionViewController: ErrorView { }
 
 extension NftCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 16 + 16
-        let spacing: CGFloat = 9 * 2
+        let padding: CGFloat = Metrics.Spacing.spacing16 + Metrics.Spacing.spacing16
+        let spacing: CGFloat = Metrics.Spacing.spacing9 * Metrics.Spacing.spacing2
         let availableWidth = collectionView.frame.width - padding - spacing
         
         let width = floor(availableWidth / 3)
         
-        return CGSize(width: width, height: 192)
+        return CGSize(width: width, height: Metrics.Sizes.nftCardHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 16)
+        UIEdgeInsets(top: Metrics.Spacing.spacing24, left: Metrics.Spacing.spacing16, bottom: Metrics.Spacing.spacing0, right: Metrics.Spacing.spacing16)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        8
+        Metrics.Spacing.spacing8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        9
+        Metrics.Spacing.spacing9
     }
 }
 

@@ -15,6 +15,8 @@ protocol NftCollectionCellDelegate: AnyObject {
     func didTapCartButton(on cell: NftCollectionCell)
 }
 
+// MARK: - NftCollectionCell
+
 final class NftCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
@@ -28,22 +30,15 @@ final class NftCollectionCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 12   //value
+        imageView.layer.cornerRadius = Metrics.CornerRadius.medium
         
         return imageView
-    }()
-    
-    private lazy var favoritesButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .white   //value
-        
-        return button
     }()
     
     private lazy var nftRatingStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 2
+        stackView.spacing = Metrics.Spacing.spacing2
         stackView.backgroundColor = .clear
         
         return stackView
@@ -51,27 +46,23 @@ final class NftCollectionCell: UICollectionViewCell {
     
     private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold) // value
+        label.font = .bodyBold
         label.textAlignment = .left
-        label.textColor = .black    //value
+        label.textColor = .textPrimary
         
         return label
     }()
     
     private lazy var nftPriceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 10, weight: .medium) // value
-        label.textColor = .black    //value
+        label.font = .caption3
+        label.textColor = .textPrimary
         
         return label
     }()
     
-    private lazy var cartButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .black   //value
-        
-        return button
-    }()
+    private lazy var favoritesButton = UIButton()
+    private lazy var cartButton = UIButton()
     
     // MARK: - Init
     
@@ -107,39 +98,41 @@ final class NftCollectionCell: UICollectionViewCell {
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nftImageView.heightAnchor.constraint(equalToConstant: 108)  //value
+            nftImageView.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardImageHeight)
         ])
         
         NSLayoutConstraint.activate([
-            favoritesButton.topAnchor.constraint(equalTo: nftImageView.topAnchor), //value
-            favoritesButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),   //value
-            favoritesButton.heightAnchor.constraint(equalToConstant: 40),
-            favoritesButton.widthAnchor.constraint(equalToConstant: 40)
+            favoritesButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
+            favoritesButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
+            favoritesButton.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardButtonSize),
+            favoritesButton.widthAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardButtonSize)
         ])
         
         NSLayoutConstraint.activate([
-            nftRatingStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),   //value
+            nftRatingStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: Metrics.Spacing.spacing8),
             nftRatingStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            nftNameLabel.topAnchor.constraint(equalTo: nftRatingStackView.bottomAnchor, constant: 5),   //value
+            nftNameLabel.topAnchor.constraint(equalTo: nftRatingStackView.bottomAnchor, constant: Metrics.Spacing.spacing5),
             nftNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftNameLabel.trailingAnchor.constraint(equalTo: cartButton.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            nftPriceLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 4),    //value
+            nftPriceLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: Metrics.Spacing.spacing4),
             nftPriceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            cartButton.topAnchor.constraint(equalTo: nftRatingStackView.bottomAnchor),    //value
-            cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),    //value
-            cartButton.heightAnchor.constraint(equalToConstant: 40),
-            cartButton.widthAnchor.constraint(equalToConstant: 40)
+            cartButton.topAnchor.constraint(equalTo: nftRatingStackView.bottomAnchor),
+            cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cartButton.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardButtonSize),
+            cartButton.widthAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardButtonSize)
         ])
     }
+    
+    // MARK: - Method for Nft Rating
     
     private func configureNftRatingStackView(with rating: Int) {
         let ratingRange = 0..<5
@@ -149,19 +142,19 @@ final class NftCollectionCell: UICollectionViewCell {
         }
         
         for nftRating in ratingRange {
-            let ratingImageView = UIImageView() //value
+            let ratingImageView = UIImageView()
             ratingImageView.contentMode = .scaleAspectFill
             ratingImageView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
-                ratingImageView.widthAnchor.constraint(equalToConstant: 12), //value
-                ratingImageView.heightAnchor.constraint(equalToConstant: 12) // value
+                ratingImageView.widthAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardRatingSize),
+                ratingImageView.heightAnchor.constraint(equalToConstant: Metrics.Sizes.nftCardRatingSize)
             ])
             
             if nftRating < rating {
-                ratingImageView.image = UIImage(named: "starFill") //value
+                ratingImageView.image = Images.starFill
             } else {
-                ratingImageView.image = UIImage(named: "star") //value
+                ratingImageView.image = Images.star
             }
             nftRatingStackView.addArrangedSubview(ratingImageView)
         }
@@ -200,11 +193,10 @@ final class NftCollectionCell: UICollectionViewCell {
         
         configureNftRatingStackView(with: nftCard.rating)
                 
-        let favoritesButtonImage = isLiked ? UIImage(named: "inFavorites") : UIImage(named: "notInFavorites")
-        let cartButtonImage = isInCart ? UIImage(named: "removeFromСart") : UIImage(named: "addToCart")
+        let favoritesButtonImage = isLiked ? Images.inFavorites : Images.notInFavorites
+        let cartButtonImage = isInCart ? Images.removeFromCart : Images.addToCart
         
         favoritesButton.setImage(favoritesButtonImage, for: .normal)
         cartButton.setImage(cartButtonImage, for: .normal)
-        
     }
 }
