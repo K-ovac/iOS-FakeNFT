@@ -74,19 +74,6 @@ final class NftCollectionViewModel {
         var loadedLikes: [String] = []
         var loadedCart: [String] = []
         
-        nftCollectionService.fetchNftCollection(id: nftCollectionId) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let nftCollection):
-                    self?.state = .data(nftCollection)
-                    print("Загружена Nft коллекция: ", nftCollection.name)
-                case .failure(let error):
-                    print(error)
-                    self?.state = .failed(error)
-                }
-            }
-        }
-        
         group.enter()
         nftCollectionService.fetchNftCollection(id: nftCollectionId) { result in
             if case .success(let collection) = result {
@@ -172,6 +159,7 @@ extension NftCollectionViewModel {
     
     private func fetchNfts(nftsId: [String]) {
         let dispatchGroup = DispatchGroup()
+        let lockQueue = DispatchQueue(label: "nftLockQueue")
         var fetchedNfts: [NFT] = []
         
         nftsId.forEach { nftId in
@@ -179,15 +167,15 @@ extension NftCollectionViewModel {
             
             nftCollectionService.fetchNftCard(id: nftId) { result in
                 switch result {
-                    
                 case .success(let nft):
-                    fetchedNfts.append(nft)
+                    lockQueue.async {
+                        fetchedNfts.append(nft)
+                        dispatchGroup.leave()
+                    }
                 case .failure(let error):
                     print(error)
-                    break
+                    dispatchGroup.leave()
                 }
-                
-                dispatchGroup.leave()
             }
         }
         
