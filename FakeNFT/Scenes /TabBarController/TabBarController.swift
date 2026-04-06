@@ -54,12 +54,13 @@ final class TabBarController: UITabBarController {
         )   //изменить на свой
         catalogController.tabBarItem = catalogTabBarItem
         
-        let cartController = UIViewController() //изменить на свой
-        cartController.tabBarItem = cartTabBarItem
+        let cartViewModel = CartViewModel(cartService: servicesAssembly.cartService)
+        let cartViewController = CartViewController(viewModel: cartViewModel)
+        cartViewController.tabBarItem = cartTabBarItem
         
         let statisticsController = UIViewController()   //изменить на свой
         statisticsController.tabBarItem = statisticsTabBarItem
 
-        viewControllers = [profileController, catalogController, cartController, statisticsController]
+        viewControllers = [profileController, catalogController, cartViewController, statisticsController]
     }
 }

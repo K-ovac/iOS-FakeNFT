@@ -8,3 +8,15 @@
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
+
+// cart
+"cart.checkoutButton.title" = "К оплате";
+"cart.emptyState.text" = "Корзина пуста";
+"cart.sortAlert.title" = "Сортировка";
+"cart.sortAlert.cancel" = "Закрыть";
+
+"cartCell.info.priceTitle" = "Цена";
+
+"cartModels.sort.byName" = "По названию";
+"cartModels.sort.byPrice" = "По цене";
+"cartModels.sort.byRating" = "По рейтингу";

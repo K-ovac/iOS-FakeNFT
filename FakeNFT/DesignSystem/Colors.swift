@@ -46,6 +46,8 @@ extension UIColor {
     private static let yaBlackDark = UIColor.white
     private static let yaLightGrayLight = UIColor(hexString: "#F7F7F8")
     private static let yaLightGrayDark = UIColor(hexString: "#2C2C2E")
+    private static let darkEmptyStarColor = UIColor(hexString: "#2F2F3A")
+    private static let lightEmptyStarColor = UIColor(hexString: "#F2F2F7")
 
     static let segmentActive = UIColor { traits in
         return traits.userInterfaceStyle == .dark
@@ -63,5 +65,23 @@ extension UIColor {
         return traits.userInterfaceStyle == .dark
         ? .yaBlackDark
         : .yaBlackLight
+    }
+    
+    static let Button = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .yaBlackDark
+        : .yaBlackLight
+    }
+    
+    static let bottomContainer = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .yaLightGrayDark
+        : .yaLightGrayLight
+    }
+    
+    static let emptyStar = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .darkEmptyStarColor
+        : .lightEmptyStarColor
     }
 }
