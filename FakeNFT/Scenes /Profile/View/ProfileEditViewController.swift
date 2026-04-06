@@ -55,14 +55,14 @@ final class ProfileEditViewController: UIViewController {
     private lazy var cameraButton: UIButton = {
         let button = UIButton(type: .system)
         
-        button.backgroundColor = .white
+        button.backgroundColor = .cardBackground
         button.layer.cornerRadius = 11.29
         button.clipsToBounds = true
         
         let cameraImage = UIImage(systemName: "camera.fill")?
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 10, weight: .medium))
         button.setImage(cameraImage, for: .normal)
-        button.tintColor = .black
+        button.tintColor = .buttonPrimaryTitle
         
         button.addTarget(self, action: #selector(changePhotoTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -75,14 +75,14 @@ final class ProfileEditViewController: UIViewController {
         let label = UILabel()
         label.text = text
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .black
+        label.textColor = .textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
     
-    private lazy var nameLabel = makeLabel("Имя")
-    private lazy var descriptionLabel = makeLabel("Описание")
-    private lazy var websiteLabel = makeLabel("Сайт")
+    private lazy var nameLabel = makeLabel(LocalizableKeys.editProfileName)
+    private lazy var descriptionLabel = makeLabel(LocalizableKeys.editProfileDescription)
+    private lazy var websiteLabel = makeLabel(LocalizableKeys.editProfileWebsite)
     
     // MARK: - Inputs
     
@@ -90,7 +90,7 @@ final class ProfileEditViewController: UIViewController {
         let field = UITextField()
         field.placeholder = placeholder
         field.font = .bodyRegular
-        field.backgroundColor = .systemGray6
+        field.backgroundColor = .textFieldBackground
         field.layer.cornerRadius = 12
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         field.leftViewMode = .always
@@ -98,13 +98,13 @@ final class ProfileEditViewController: UIViewController {
         return field
     }
     
-    private lazy var nameTextField = makeTextField(placeholder: "Введите имя")
-    private lazy var websiteTextField = makeTextField(placeholder: "Введите сайт")
+    private lazy var nameTextField = makeTextField(placeholder: LocalizableKeys.editProfileNamePlaceholder)
+    private lazy var websiteTextField = makeTextField(placeholder: LocalizableKeys.editProfileWebsitePlaceholder)
     
     private lazy var descriptionTextView: UITextView = {
         let view = UITextView()
         view.font = .bodyRegular
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .textFieldBackground
         view.layer.cornerRadius = 12
         view.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -115,10 +115,10 @@ final class ProfileEditViewController: UIViewController {
 
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Сохранить", for: .normal)
+        button.setTitle(LocalizableKeys.editProfileSave, for: .normal)
         button.titleLabel?.font = .bodyBold
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.setTitleColor(.buttonPrimaryTitle, for: .normal)
+        button.backgroundColor = .buttonPrimaryBackground
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -133,48 +133,48 @@ final class ProfileEditViewController: UIViewController {
     }()
     
     // MARK: - Init
-     init(profile: Profile?) {
-         self.profile = profile
-         let service = ProfileServiceImpl(networkClient: DefaultNetworkClient())
-         self.viewModel = ProfileEditViewModel(profileService: service)
-         super.init(nibName: nil, bundle: nil)
-     }
-     
-     required init?(coder: NSCoder) { fatalError() }
-     
-     // MARK: - Lifecycle
-     override func viewDidLoad() {
-         super.viewDidLoad()
-         setupUI()
-         setupNavigationBar()
-         setupKeyboardDismiss()
-         setupTextFieldsDelegates()
-         setupKeyboardNotifications()
-         fillData()
-         bindViewModel()
-     }
-     
-     deinit {
-         NotificationCenter.default.removeObserver(self)
-     }
-     
-     // MARK: - Setup
-     
-     private func setupKeyboardNotifications() {
-         NotificationCenter.default.addObserver(
-             self,
-             selector: #selector(keyboardWillShow),
-             name: UIResponder.keyboardWillShowNotification,
-             object: nil
-         )
-         NotificationCenter.default.addObserver(
-             self,
-             selector: #selector(keyboardWillHide),
-             name: UIResponder.keyboardWillHideNotification,
-             object: nil
-         )
-     }
-     
+    init(profile: Profile?) {
+        self.profile = profile
+        let service = ProfileServiceImpl(networkClient: DefaultNetworkClient())
+        self.viewModel = ProfileEditViewModel(profileService: service)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        setupNavigationBar()
+        setupKeyboardDismiss()
+        setupTextFieldsDelegates()
+        setupKeyboardNotifications()
+        fillData()
+        bindViewModel()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Setup
+    
+    private func setupKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
               let activeField = activeTextField else { return }
@@ -197,21 +197,21 @@ final class ProfileEditViewController: UIViewController {
         let fieldBottom = fieldFrame.maxY
         let visibleHeight = scrollView.frame.height - keyboardHeight - 20
         
-        let offsetY = max(0, (fieldBottom - visibleHeight)/2)
+        let offsetY = max(0, (fieldBottom - visibleHeight) / 2)
         
         scrollView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: true)
     }
-     
-     @objc private func keyboardWillHide(_ notification: Notification) {
-         if let originalInsets = originalScrollViewInsets {
-             scrollView.contentInset = originalInsets
-             scrollView.scrollIndicatorInsets = originalInsets
-             originalScrollViewInsets = nil
-         } else {
-             scrollView.contentInset = .zero
-             scrollView.scrollIndicatorInsets = .zero
-         }
-     }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        if let originalInsets = originalScrollViewInsets {
+            scrollView.contentInset = originalInsets
+            scrollView.scrollIndicatorInsets = originalInsets
+            originalScrollViewInsets = nil
+        } else {
+            scrollView.contentInset = .zero
+            scrollView.scrollIndicatorInsets = .zero
+        }
+    }
     
     private func setupNavigationBar() {
         let backButton = UIBarButtonItem(
@@ -220,30 +220,62 @@ final class ProfileEditViewController: UIViewController {
             target: self,
             action: #selector(backTapped)
         )
-        backButton.tintColor = .black
+        backButton.tintColor = .navigationBarTint
         navigationItem.leftBarButtonItem = backButton
         
-        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.tintColor = .navigationBarTint
     }
     
     @objc private func backTapped() {
         let alert = UIAlertController(
-            title: "Уверены, что хотите выйти?",
+            title: LocalizableKeys.editProfileExitConfirmationTitle,
             message: nil,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel) { _ in })
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileExitConfirmationStay, style: .cancel) { _ in })
         
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileExitConfirmationExit, style: .default) { [weak self] _ in
             self?.dismiss(animated: true)
         })
         
         present(alert, animated: true)
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+
+    private func updateColors() {
+        view.backgroundColor = .background
+        scrollView.backgroundColor = .background
+        contentView.backgroundColor = .background
+        
+        nameLabel.textColor = .textPrimary
+        descriptionLabel.textColor = .textPrimary
+        websiteLabel.textColor = .textPrimary
+        
+        nameTextField.backgroundColor = .textFieldBackground
+        nameTextField.textColor = .textFieldText
+        websiteTextField.backgroundColor = .textFieldBackground
+        websiteTextField.textColor = .textFieldText
+        
+        descriptionTextView.backgroundColor = .textFieldBackground
+        descriptionTextView.textColor = .textFieldText
+        
+        saveButton.backgroundColor = .buttonPrimaryBackground
+        saveButton.setTitleColor(.buttonPrimaryTitle, for: .normal)
+        
+        cameraButton.backgroundColor = .cardBackground
+        cameraButton.tintColor = .buttonPrimaryTitle
+    }
+    
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
         
         view.addSubview(scrollView)
         view.addSubview(saveButton)
@@ -271,7 +303,6 @@ final class ProfileEditViewController: UIViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            websiteTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
             // avatar
             avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -288,6 +319,7 @@ final class ProfileEditViewController: UIViewController {
             // name
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 24),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             nameTextField.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
@@ -297,6 +329,7 @@ final class ProfileEditViewController: UIViewController {
             // description
             descriptionLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
             descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
             
             descriptionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
             descriptionTextView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
@@ -306,6 +339,7 @@ final class ProfileEditViewController: UIViewController {
             // website
             websiteLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
             websiteLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            websiteLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
             
             websiteTextField.topAnchor.constraint(equalTo: websiteLabel.bottomAnchor, constant: 8),
             websiteTextField.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
@@ -375,8 +409,12 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func showError(message: String) {
-        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(
+            title: LocalizableKeys.errorTitle,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorRepeat, style: .default))
         present(alert, animated: true)
     }
     
@@ -386,7 +424,7 @@ final class ProfileEditViewController: UIViewController {
         guard let profile else { return }
         
         guard !(nameTextField.text ?? "").isEmpty else {
-            showError(message: "Введите имя")
+            showError(message: LocalizableKeys.editProfileNameRequired)
             return
         }
         
@@ -402,54 +440,38 @@ final class ProfileEditViewController: UIViewController {
         viewModel.saveProfile(updated, profileId: "1")
     }
     
-    @objc private func cancelTapped() {
-        let alert = UIAlertController(
-            title: "Уверены, что хотите выйти?",
-            message: nil,
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel) { _ in })
-        
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { [weak self] _ in
-            self?.dismiss(animated: true)
-        })
-        
-        present(alert, animated: true)
-    }
-    
     @objc private func changePhotoTapped() {
         let alert = UIAlertController(
-            title: "Фото профиля",
+            title: LocalizableKeys.editProfilePhotoTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
         
-        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileChangePhoto, style: .default) { [weak self] _ in
             self?.showPhotoURLInput()
         })
         
-        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileDeletePhoto, style: .destructive) { [weak self] _ in
             self?.deletePhoto()
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileCancel, style: .cancel))
         
         present(alert, animated: true)
     }
     
     private let defaultAvatarURL: String? = nil
-
+    
     @objc private func deletePhoto() {
         let alert = UIAlertController(
-            title: "Удалить фото?",
-            message: "Фото профиля будет удалено",
+            title: LocalizableKeys.editProfileDeleteConfirmationTitle,
+            message: LocalizableKeys.editProfileDeleteConfirmationMessage,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileCancel, style: .cancel))
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileDeletePhoto, style: .destructive) { [weak self] _ in
             self?.updatedAvatarURL = ""
             
             self?.avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
@@ -464,25 +486,28 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func showPhotoURLInput() {
-        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: LocalizableKeys.editProfilePhotoURLTitle,
+            message: nil,
+            preferredStyle: .alert
+        )
         
         alert.addTextField { textField in
-            textField.placeholder = "http://example.com/image.jpg"
+            textField.placeholder = LocalizableKeys.editProfilePhotoURLPlaceholder
             textField.text = self.updatedAvatarURL ?? self.profile?.avatar
         }
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileCancel, style: .cancel))
         
-        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.editProfileSave, style: .default) { [weak self] _ in
             guard let text = alert.textFields?.first?.text,
                   let url = URL(string: text) else {
-                self?.showError(message: "Некорректная ссылка")
+                self?.showError(message: LocalizableKeys.editProfilePhotoURLInvalid)
                 return
             }
             
             self?.updatedAvatarURL = text
             
-            // Показываем индикатор загрузки
             self?.activityIndicator.startAnimating()
             
             KingfisherManager.shared.retrieveImage(with: url) { result in
@@ -495,7 +520,7 @@ final class ProfileEditViewController: UIViewController {
                         print("✅ Avatar loaded successfully")
                     case .failure(let error):
                         print("❌ Failed to load avatar: \(error)")
-                        self?.showError(message: "Не удалось загрузить изображение")
+                        self?.showError(message: LocalizableKeys.editProfileImageLoadError)
                         self?.updatedAvatarURL = nil
                     }
                 }

@@ -24,7 +24,7 @@ final class FavoritesNFTViewController: UIViewController {
         collectionView.register(FavoritesNFTCollectionViewCell.self, forCellWithReuseIdentifier: FavoritesNFTCollectionViewCell.reuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .background
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -38,10 +38,10 @@ final class FavoritesNFTViewController: UIViewController {
     
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "У вас еще нет избранных NFT"
+        label.text = LocalizableKeys.favoritesEmpty
         label.textAlignment = .center
         label.font = .bodyBold
-        label.textColor = .black
+        label.textColor = .textPrimary
         label.numberOfLines = 0
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,9 +67,17 @@ final class FavoritesNFTViewController: UIViewController {
         viewModel.fetchFavorites()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+    
     // MARK: - Setup
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
         
         view.addSubview(collectionView)
         view.addSubview(activityIndicator)
@@ -100,7 +108,13 @@ final class FavoritesNFTViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
-        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.tintColor = .navigationBarTint
+    }
+    
+    private func updateColors() {
+        view.backgroundColor = .background
+        collectionView.backgroundColor = .background
+        emptyLabel.textColor = .textPrimary
     }
     
     private func bindViewModel() {
@@ -132,29 +146,29 @@ final class FavoritesNFTViewController: UIViewController {
     
     private func showError(message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: LocalizableKeys.errorTitle,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorRepeat, style: .default) { [weak self] _ in
             self?.viewModel.fetchFavorites()
         })
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorCancel, style: .cancel))
         present(alert, animated: true)
     }
     
     private func showRemoveConfirmation(for nftId: String, nftName: String) {
         let alert = UIAlertController(
-            title: "Удаление из избранного",
-            message: "Вы уверены, что хотите удалить \"\(nftName)\" из избранного?",
+            title: LocalizableKeys.favoritesRemoveConfirmationTitle,
+            message: LocalizableKeys.favoritesRemoveConfirmationMessage(with: nftName),
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.favoritesRemove, style: .destructive) { [weak self] _ in
             self?.viewModel.removeFromFavorites(nftId: nftId)
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.favoritesCancel, style: .cancel))
         
         present(alert, animated: true)
     }
@@ -181,7 +195,6 @@ extension FavoritesNFTViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension FavoritesNFTViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Открыть детальный экран NFT (если нужно)
         print("Selected NFT: \(viewModel.nfts[indexPath.row].name)")
     }
 }

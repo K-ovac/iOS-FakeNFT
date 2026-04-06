@@ -5,7 +5,6 @@
 //  Created by Воробьева Юлия on 26.03.2026.
 //
 
-
 import UIKit
 import Kingfisher
 
@@ -56,7 +55,7 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Цена"
+        label.text = LocalizableKeys.priceTitle
         label.font = .caption1
         label.textColor = .textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +72,7 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var fromLabel: UILabel = {
         let label = UILabel()
-        label.text = "от "
+        label.text = LocalizableKeys.fromAuthor
         label.font = .caption1
         label.textColor = .textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false

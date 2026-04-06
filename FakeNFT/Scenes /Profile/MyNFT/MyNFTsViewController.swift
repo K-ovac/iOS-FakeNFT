@@ -19,7 +19,7 @@ final class MyNFTsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .background
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -33,10 +33,10 @@ final class MyNFTsViewController: UIViewController {
     
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "У вас еще нет NFT"
+        label.text = LocalizableKeys.myNftsEmpty
         label.textAlignment = .center
         label.font = .bodyBold
-        label.textColor = .black
+        label.textColor = .textPrimary
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -61,9 +61,17 @@ final class MyNFTsViewController: UIViewController {
         viewModel.fetchNFTs()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+    
     // MARK: - Setup
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
         
         view.addSubview(tableView)
         view.addSubview(activityIndicator)
@@ -92,7 +100,7 @@ final class MyNFTsViewController: UIViewController {
             target: self,
             action: #selector(sortTapped)
         )
-        sortButton.tintColor = .black
+        sortButton.tintColor = .navigationBarTint
         navigationItem.rightBarButtonItem = sortButton
         
         let appearance = UINavigationBarAppearance()
@@ -100,8 +108,13 @@ final class MyNFTsViewController: UIViewController {
         appearance.backgroundColor = .clear
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        
-        
+        navigationController?.navigationBar.tintColor = .navigationBarTint
+    }
+    
+    private func updateColors() {
+        view.backgroundColor = .background
+        tableView.backgroundColor = .background
+        emptyLabel.textColor = .textPrimary
     }
     
     private func bindViewModel() {
@@ -133,38 +146,38 @@ final class MyNFTsViewController: UIViewController {
     
     private func showError(message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: LocalizableKeys.errorTitle,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorRepeat, style: .default) { [weak self] _ in
             self?.viewModel.fetchNFTs()
         })
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.errorCancel, style: .cancel))
         present(alert, animated: true)
     }
     
     // MARK: - Actions
     @objc private func sortTapped() {
         let alert = UIAlertController(
-            title: "Сортировка",
+            title: LocalizableKeys.sortTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
         
-        alert.addAction(UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.sortByPrice, style: .default) { [weak self] _ in
             self?.viewModel.sortByPrice()
         })
         
-        alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.sortByRating, style: .default) { [weak self] _ in
             self?.viewModel.sortByRating()
         })
         
-        alert.addAction(UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizableKeys.sortByName, style: .default) { [weak self] _ in
             self?.viewModel.sortByName()
         })
         
-        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizableKeys.sortCancel, style: .cancel))
         
         present(alert, animated: true)
     }
@@ -196,6 +209,5 @@ extension MyNFTsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // TODO: Открыть детальный экран NFT
     }
 }
