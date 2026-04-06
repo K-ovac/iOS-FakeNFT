@@ -11,21 +11,29 @@ protocol CartViewModelProtocol {
     var onItemsChanged: (([CartItem]) -> Void)? { get set }
     var onSummaryChanged: ((CartSummary) -> Void)? { get set }
     var onStateChanged: ((CartViewState) -> Void)? { get set }
+    var onShowDeleteConfirmation: ((CartItem) -> Void)? { get set }
+    var onError: ((String) -> Void)? { get set }
 
     func viewDidLoad()
     func didSelectSort(_ option: CartSortOption)
+    func didTapDelete(for item: CartItem)
+    func confirmDelete()
 }
 
 final class CartViewModel: CartViewModelProtocol {
     var onItemsChanged: (([CartItem]) -> Void)?
     var onSummaryChanged: ((CartSummary) -> Void)?
     var onStateChanged: ((CartViewState) -> Void)?
+    var onShowDeleteConfirmation: ((CartItem) -> Void)?
+    var onError: ((String) -> Void)?
 
     private var items: [CartItem] = []
     private var sortOption: CartSortOption = .byName
     private let sortOptionKey = "cartSortOption"
     
     private let cartService: CartServiceProtocol
+    
+    private var pendingDeleteItem: CartItem?
 
     init(cartService: CartServiceProtocol) {
         self.cartService = cartService
@@ -96,5 +104,28 @@ final class CartViewModel: CartViewModelProtocol {
             return .byName
         }
         return option
+    }
+    
+    func didTapDelete(for item: CartItem) {
+        pendingDeleteItem = item
+        onShowDeleteConfirmation?(item)
+    }
+    
+    func confirmDelete() {
+        guard let item = pendingDeleteItem else { return }
+        
+        cartService.removeFromCart(id: item.id) { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success:
+                self.pendingDeleteItem = nil
+                self.loadCart()
+            case .failure(let error):
+                print("DELETE ERROR:", error)
+                self.pendingDeleteItem = nil
+                self.onError?("Не удалось удалить NFT из корзины")
+            }
+        }
     }
 }

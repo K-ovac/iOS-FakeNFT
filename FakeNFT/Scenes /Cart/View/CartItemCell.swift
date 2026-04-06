@@ -18,6 +18,8 @@ final class CartItemCell: UITableViewCell {
     private let priceLabel = UILabel()
     private let priceTitleLabel = UILabel()
     
+    var onDeleteTap: (() -> Void)?
+    
     private func setupUI() {
         setupNftImageView()
         setupCartItemInfoView()
@@ -35,7 +37,7 @@ final class CartItemCell: UITableViewCell {
         nameLabel.text = item.name
         configureRating(item.rating)
         priceLabel.text = "\(item.price) ETH"
-        loadImage(from: item.imageURL)
+        nftImageView.setImage(from: item.imageURL)
     }
     
     private func configureRating(_ rating: Int) {
@@ -54,20 +56,8 @@ final class CartItemCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadImage(from url: URL?) {
-        guard let url else { return }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            guard
-                let self,
-                let data,
-                let image = UIImage(data: data)
-            else { return }
-
-            DispatchQueue.main.async {
-                self.nftImageView.image = image
-            }
-        }.resume()
+    @objc private func didTapDeleteButton() {
+        onDeleteTap?()
     }
     
     override func prepareForReuse() {
@@ -171,6 +161,8 @@ extension CartItemCell {
         
         deleteButton.setImage(UIImage(resource: .cart), for: .normal)
         deleteButton.tintColor = .Button
+        
+        deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             deleteButton.widthAnchor.constraint(equalToConstant: 40),

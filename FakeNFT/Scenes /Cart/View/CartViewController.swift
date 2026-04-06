@@ -46,7 +46,7 @@ final class CartViewController: UIViewController {
         
         viewModel.onSummaryChanged = { [weak self] summary in
             self?.countNFTLabel.text = "\(summary.itemsCount) NFT"
-            self?.summaryLabel.text = "\(summary.totalPrice) ETH"
+            self?.summaryLabel.text = "\(String(format: "%.2f", summary.totalPrice)) ETH" 
         }
         
         viewModel.onStateChanged = { [weak self] state in
@@ -77,6 +77,21 @@ final class CartViewController: UIViewController {
                 print(message)
             }
         }
+    
+        viewModel.onShowDeleteConfirmation = { [weak self] item in
+            self?.showDeleteConfirmation(for: item)
+        }
+        
+        viewModel.onError = { [weak self] message in
+            let alert = UIAlertController(
+                title: "Ошибка",
+                message: message,
+                preferredStyle: .alert
+            )
+
+            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            self?.present(alert, animated: true)
+        }
     }
     
     @objc
@@ -99,6 +114,22 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupEmptyStateView()
     }
+    
+    private func showDeleteConfirmation(for item: CartItem) {
+        let vc = DeleteConfirmationViewController(item: item)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+
+        vc.onConfirm = { [weak self] in
+            self?.viewModel.confirmDelete()
+        }
+
+        vc.onCancel = {
+            print("Delete cancelled")
+        }
+
+        present(vc, animated: true)
+    }
 }
 
 extension CartViewController: UITableViewDataSource {
@@ -113,6 +144,9 @@ extension CartViewController: UITableViewDataSource {
         
         let item = items[indexPath.row]
         cell.configure(with: item)
+        cell.onDeleteTap = { [weak self] in
+            self?.viewModel.didTapDelete(for: item)
+        }
         return cell
     }
 }
