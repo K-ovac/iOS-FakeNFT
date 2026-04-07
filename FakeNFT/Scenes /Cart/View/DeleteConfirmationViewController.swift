@@ -8,6 +8,9 @@
 import UIKit
 
 final class DeleteConfirmationViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     var onConfirm: (() -> Void)?
     var onCancel: (() -> Void)?
 
@@ -19,6 +22,8 @@ final class DeleteConfirmationViewController: UIViewController {
     private let deleteButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
 
+    // MARK: - Init
+    
     init(item: CartItem) {
         self.item = item
         super.init(nibName: nil, bundle: nil)
@@ -28,6 +33,8 @@ final class DeleteConfirmationViewController: UIViewController {
         nil
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -36,6 +43,7 @@ final class DeleteConfirmationViewController: UIViewController {
         configure()
     }
 
+    // MARK: - Actions
     
     @objc
     private func didTapDeleteButton() {
@@ -51,15 +59,19 @@ final class DeleteConfirmationViewController: UIViewController {
         }
     }
     
+    // MARK: - Configuration
+    
+    private func configure() {
+        imageView.setImage(from: item.imageURL)
+    }
+    
+    // MARK: - Setup
+    
     private func setupUI() {
         setupBlurEffectView()
         setupImageView()
         setupTitleLabel()
         setupButtons()
-    }
-    
-    private func configure() {
-        imageView.setImage(from: item.imageURL)
     }
 }
 

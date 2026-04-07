@@ -9,6 +9,9 @@ import UIKit
 import ProgressHUD
 
 final class CartViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     private var viewModel: CartViewModelProtocol
     private let tableView = UITableView()
     private let summaryLabel = UILabel()
@@ -18,7 +21,10 @@ final class CartViewController: UIViewController {
     private let sortButton = UIButton(type: .system)
     private let emptyStateView = UIView()
     private let emptyStateLabel = UILabel()
+    
     private var items: [CartItem] = []
+    
+    // MARK: - Init
     
     init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
@@ -29,14 +35,17 @@ final class CartViewController: UIViewController {
         nil
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupUI()
-        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         bindViewModel()
         viewModel.viewDidLoad()
     }
+    
+    // MARK: - Bindings
     
     private func bindViewModel() {
         viewModel.onItemsChanged = { [weak self] items in
@@ -94,6 +103,8 @@ final class CartViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions
+    
     @objc
     private func didTapSortButton() {
         let alert = UIAlertController(title: NSLocalizedString("cart.sortAlert.title", comment: ""), message: nil, preferredStyle: .actionSheet)
@@ -108,12 +119,7 @@ final class CartViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    private func setupUI() {
-        setupSortButton()
-        setupBottomContainerView()
-        setupTableView()
-        setupEmptyStateView()
-    }
+    // MARK: - Navigation
     
     private func showDeleteConfirmation(for item: CartItem) {
         let vc = DeleteConfirmationViewController(item: item)
@@ -127,10 +133,21 @@ final class CartViewController: UIViewController {
         vc.onCancel = {
             print("Delete cancelled")
         }
-
+        
         present(vc, animated: true)
     }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        setupSortButton()
+        setupBottomContainerView()
+        setupTableView()
+        setupEmptyStateView()
+    }
 }
+
+// MARK: - UITableViewDataSource
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -151,10 +168,14 @@ extension CartViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
+
 //TODO:
 extension CartViewController: UITableViewDelegate {
     
 }
+
+// MARK: - Setup
 
 extension CartViewController {
     private func setupSortButton() {
@@ -163,6 +184,8 @@ extension CartViewController {
         
         sortButton.setImage(UIImage(resource: .sort), for: .normal)
         sortButton.tintColor = .Button
+        
+        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             sortButton.heightAnchor.constraint(equalToConstant: 42),

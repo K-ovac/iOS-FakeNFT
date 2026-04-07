@@ -7,6 +7,9 @@
 import UIKit
 
 final class CartItemCell: UITableViewCell {
+    
+    // MARK: - Properties
+    
     static let reuseIdentifier = "CartItemCell"
     
     private let cartItemInfoView = UIView()
@@ -20,18 +23,18 @@ final class CartItemCell: UITableViewCell {
     
     var onDeleteTap: (() -> Void)?
     
-    private func setupUI() {
-        setupNftImageView()
-        setupCartItemInfoView()
-        setupCartItemInfoViewLabels()
-        setupCartItemInfoViewRating()
-        setupDeleteButton()
-    }
+    // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
+    
+    required init?(coder: NSCoder) {
+        nil
+    }
+    
+    // MARK: - Configuration
     
     func configure(with item: CartItem) {
         nameLabel.text = item.name
@@ -52,19 +55,29 @@ final class CartItemCell: UITableViewCell {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Actions
     
     @objc private func didTapDeleteButton() {
         onDeleteTap?()
     }
+    
+    // MARK: - Lifecycle
     
     override func prepareForReuse() {
         super.prepareForReuse()
         nftImageView.image = nil
         nameLabel.text = nil
         priceLabel.text = nil
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        setupNftImageView()
+        setupCartItemInfoView()
+        setupCartItemInfoViewLabels()
+        setupCartItemInfoViewRating()
+        setupDeleteButton()
     }
 }
 

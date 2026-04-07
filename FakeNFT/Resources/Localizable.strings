@@ -22,6 +22,5 @@
 "cartModels.sort.byRating" = "По рейтингу";
 
 "deleteConfirmation.title" = "Вы уверены, что хотите удалить объект из корзины?";
-
 "deleteConfirmation.cancelButton.title" = "Вернуться";
 "deleteConfirmation.deleteButton.title" = "Удалить";

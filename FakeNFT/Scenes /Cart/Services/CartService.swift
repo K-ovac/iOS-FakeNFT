@@ -8,14 +8,21 @@
 import Foundation
 
 final class CartService: CartServiceProtocol {
+    
+    // MARK: - Properties
+    
     private let networkClient: NetworkClient
     private let nftService: NftService
     private let orderId = "1"
 
+    // MARK: - Init
+    
     init(networkClient: NetworkClient, nftService: NftService) {
         self.networkClient = networkClient
         self.nftService = nftService
     }
+    
+    // MARK: - CartServiceProtocol
 
     func loadCart(completion: @escaping CartItemsCompletion) {
         let request = OrderRequest(id: orderId)
@@ -57,6 +64,8 @@ final class CartService: CartServiceProtocol {
             }
         }
     }
+    
+    // MARK: - Private
     
     private func updateOrder(orderId: String, nftIds: [String], completion: @escaping CartActionCompletion) {
         guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)") else {
