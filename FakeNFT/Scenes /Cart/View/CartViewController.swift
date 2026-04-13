@@ -9,6 +9,9 @@ import UIKit
 import ProgressHUD
 
 final class CartViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     private var viewModel: CartViewModelProtocol
     private let tableView = UITableView()
     private let summaryLabel = UILabel()
@@ -18,7 +21,10 @@ final class CartViewController: UIViewController {
     private let sortButton = UIButton(type: .system)
     private let emptyStateView = UIView()
     private let emptyStateLabel = UILabel()
+    
     private var items: [CartItem] = []
+    
+    // MARK: - Init
     
     init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
@@ -29,14 +35,17 @@ final class CartViewController: UIViewController {
         nil
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupUI()
-        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         bindViewModel()
         viewModel.viewDidLoad()
     }
+    
+    // MARK: - Bindings
     
     private func bindViewModel() {
         viewModel.onItemsChanged = { [weak self] items in
@@ -46,7 +55,7 @@ final class CartViewController: UIViewController {
         
         viewModel.onSummaryChanged = { [weak self] summary in
             self?.countNFTLabel.text = "\(summary.itemsCount) NFT"
-            self?.summaryLabel.text = "\(summary.totalPrice) ETH"
+            self?.summaryLabel.text = "\(String(format: "%.2f", summary.totalPrice)) ETH" 
         }
         
         viewModel.onStateChanged = { [weak self] state in
@@ -77,7 +86,24 @@ final class CartViewController: UIViewController {
                 print(message)
             }
         }
+    
+        viewModel.onShowDeleteConfirmation = { [weak self] item in
+            self?.showDeleteConfirmation(for: item)
+        }
+        
+        viewModel.onError = { [weak self] message in
+            let alert = UIAlertController(
+                title: "Ошибка",
+                message: message,
+                preferredStyle: .alert
+            )
+
+            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            self?.present(alert, animated: true)
+        }
     }
+    
+    // MARK: - Actions
     
     @objc
     private func didTapSortButton() {
@@ -93,6 +119,26 @@ final class CartViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    // MARK: - Navigation
+    
+    private func showDeleteConfirmation(for item: CartItem) {
+        let vc = DeleteConfirmationViewController(item: item)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+
+        vc.onConfirm = { [weak self] in
+            self?.viewModel.confirmDelete()
+        }
+
+        vc.onCancel = {
+            print("Delete cancelled")
+        }
+        
+        present(vc, animated: true)
+    }
+    
+    // MARK: - Setup
+    
     private func setupUI() {
         setupSortButton()
         setupBottomContainerView()
@@ -100,6 +146,8 @@ final class CartViewController: UIViewController {
         setupEmptyStateView()
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -113,14 +161,21 @@ extension CartViewController: UITableViewDataSource {
         
         let item = items[indexPath.row]
         cell.configure(with: item)
+        cell.onDeleteTap = { [weak self] in
+            self?.viewModel.didTapDelete(for: item)
+        }
         return cell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 //TODO:
 extension CartViewController: UITableViewDelegate {
     
 }
+
+// MARK: - Setup
 
 extension CartViewController {
     private func setupSortButton() {
@@ -129,6 +184,8 @@ extension CartViewController {
         
         sortButton.setImage(UIImage(resource: .sort), for: .normal)
         sortButton.tintColor = .Button
+        
+        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             sortButton.heightAnchor.constraint(equalToConstant: 42),

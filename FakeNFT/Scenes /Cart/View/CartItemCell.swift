@@ -7,6 +7,9 @@
 import UIKit
 
 final class CartItemCell: UITableViewCell {
+    
+    // MARK: - Properties
+    
     static let reuseIdentifier = "CartItemCell"
     
     private let cartItemInfoView = UIView()
@@ -18,24 +21,26 @@ final class CartItemCell: UITableViewCell {
     private let priceLabel = UILabel()
     private let priceTitleLabel = UILabel()
     
-    private func setupUI() {
-        setupNftImageView()
-        setupCartItemInfoView()
-        setupCartItemInfoViewLabels()
-        setupCartItemInfoViewRating()
-        setupDeleteButton()
-    }
+    var onDeleteTap: (() -> Void)?
+    
+    // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
+    required init?(coder: NSCoder) {
+        nil
+    }
+    
+    // MARK: - Configuration
+    
     func configure(with item: CartItem) {
         nameLabel.text = item.name
         configureRating(item.rating)
         priceLabel.text = "\(item.price) ETH"
-        loadImage(from: item.imageURL)
+        nftImageView.setImage(from: item.imageURL)
     }
     
     private func configureRating(_ rating: Int) {
@@ -50,31 +55,29 @@ final class CartItemCell: UITableViewCell {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    // MARK: - Actions
+    
+    @objc private func didTapDeleteButton() {
+        onDeleteTap?()
     }
     
-    private func loadImage(from url: URL?) {
-        guard let url else { return }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            guard
-                let self,
-                let data,
-                let image = UIImage(data: data)
-            else { return }
-
-            DispatchQueue.main.async {
-                self.nftImageView.image = image
-            }
-        }.resume()
-    }
+    // MARK: - Lifecycle
     
     override func prepareForReuse() {
         super.prepareForReuse()
         nftImageView.image = nil
         nameLabel.text = nil
         priceLabel.text = nil
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        setupNftImageView()
+        setupCartItemInfoView()
+        setupCartItemInfoViewLabels()
+        setupCartItemInfoViewRating()
+        setupDeleteButton()
     }
 }
 
@@ -171,6 +174,8 @@ extension CartItemCell {
         
         deleteButton.setImage(UIImage(resource: .cart), for: .normal)
         deleteButton.tintColor = .Button
+        
+        deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             deleteButton.widthAnchor.constraint(equalToConstant: 40),

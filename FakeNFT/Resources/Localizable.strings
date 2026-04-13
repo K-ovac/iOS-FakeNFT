@@ -20,3 +20,7 @@
 "cartModels.sort.byName" = "По названию";
 "cartModels.sort.byPrice" = "По цене";
 "cartModels.sort.byRating" = "По рейтингу";
+
+"deleteConfirmation.title" = "Вы уверены, что хотите удалить объект из корзины?";
+"deleteConfirmation.cancelButton.title" = "Вернуться";
+"deleteConfirmation.deleteButton.title" = "Удалить";
