@@ -17,12 +17,12 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
-    
-    var collectionsService: CollectionsService {
-        CollectionsServiceImpl(
-            networkClient: networkClient
-        )
-    }
+    // TODO: - Раскомментировать после добавления
+//    var collectionsService: CollectionsService {
+//        CollectionsServiceImpl(
+//            networkClient: networkClient
+//        )
+//    }
     
     var profileService: ProfileService {
         ProfileServiceImpl(networkClient: networkClient)

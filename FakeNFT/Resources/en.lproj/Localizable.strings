@@ -22,3 +22,67 @@
 
 //
 "RefreshControl.title" = "Updating";
+"Catalog.openNft" = "Open NFT";
+
+// Common Errors
+"Error.title" = "Error";
+"Error.network" = "A network error occurred";
+"Error.unknown" = "An unknown error occurred";
+"Error.repeat" = "Retry";
+
+// Profile
+"Profile.myNft" = "My NFTs";
+"Profile.favorites" = "Favorite NFTs";
+
+// Favorites Screen
+"Favorites.empty" = "You don't have any favorite NFTs yet";
+
+// My NFTs Screen
+"MyNFTs.empty" = "You don't have any NFTs yet";
+"MyNFT.fromAuthor" = "by ";
+
+// Sort Options
+"Sort.title" = "Sort";
+"Sort.byPrice" = "By price";
+"Sort.byRating" = "By rating";
+"Sort.byName" = "By name";
+"Sort.cancel" = "Cancel";
+
+// Edit Profile Screen
+"EditProfile.title" = "Edit Profile";
+"EditProfile.name" = "Name";
+"EditProfile.description" = "Description";
+"EditProfile.website" = "Website";
+"EditProfile.namePlaceholder" = "Enter name";
+"EditProfile.websitePlaceholder" = "Enter website";
+"EditProfile.save" = "Save";
+"EditProfile.photoTitle" = "Profile Photo";
+"EditProfile.changePhoto" = "Change Photo";
+"EditProfile.deletePhoto" = "Delete Photo";
+"EditProfile.cancel" = "Cancel";
+"EditProfile.deleteConfirmationTitle" = "Delete photo?";
+"EditProfile.deleteConfirmationMessage" = "Profile photo will be deleted";
+"EditProfile.photoURLTitle" = "Photo URL";
+"EditProfile.photoURLPlaceholder" = "http://example.com/image.jpg";
+"EditProfile.photoURLInvalid" = "Invalid URL";
+"EditProfile.imageLoadError" = "Failed to load image";
+"EditProfile.exitConfirmationTitle" = "Are you sure you want to exit?";
+"EditProfile.exitConfirmationStay" = "Stay";
+"EditProfile.exitConfirmationExit" = "Exit";
+"EditProfile.nameRequired" = "Please enter your name";
+
+// Remove from Favorites
+"Favorites.removeConfirmationTitle" = "Remove from Favorites";
+"Favorites.removeConfirmationMessage" = "Are you sure you want to remove \"%@\" from favorites?";
+"Favorites.remove" = "Remove";
+"Favorites.cancel" = "Cancel";
+
+// Error Messages
+"Error.title" = "Error";
+"Error.repeat" = "Retry";
+"Error.cancel" = "Cancel";
+"Error.removeFailed" = "Failed to remove from favorites";
+"Error.updateFailed" = "Failed to update favorites list";
+
+// Price Label
+"Price.title" = "Price";

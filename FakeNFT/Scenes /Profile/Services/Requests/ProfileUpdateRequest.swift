@@ -2,8 +2,6 @@
 //  ProfileUpdateRequest.swift
 //  FakeNFT
 //
-//  Created by Максим Лозебной on 03.04.2026.
-//
 
 import Foundation
 
@@ -14,7 +12,9 @@ struct ProfileUpdateRequest: NetworkRequest {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
     
-    var httpMethod: HttpMethod { .put }
+    var httpMethod: HttpMethod {
+        .put
+    }
     
     var dto: Dto? {
         ProfileUpdateDto(profile: profile)
@@ -44,6 +44,7 @@ struct ProfileUpdateDto: Dto {
             dict["nfts"] = profile.nfts.joined(separator: ",")
         }
         
+        print("📤 Update payload: \(dict)")
         return dict
     }
 }
