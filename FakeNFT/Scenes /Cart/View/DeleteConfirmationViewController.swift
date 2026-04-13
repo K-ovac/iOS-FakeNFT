@@ -143,7 +143,7 @@ extension DeleteConfirmationViewController {
         deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 56),
+            deleteButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -4),
             deleteButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             deleteButton.heightAnchor.constraint(equalToConstant: 44),
             deleteButton.widthAnchor.constraint(equalToConstant: 127),

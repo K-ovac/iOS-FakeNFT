@@ -18,6 +18,7 @@ protocol CartViewModelProtocol {
     func didSelectSort(_ option: CartSortOption)
     func didTapDelete(for item: CartItem)
     func confirmDelete()
+    func refresh()
 }
 
 final class CartViewModel: CartViewModelProtocol {
@@ -79,6 +80,10 @@ final class CartViewModel: CartViewModelProtocol {
                 self.onError?("Не удалось удалить NFT из корзины")
             }
         }
+    }
+    
+    func refresh() {
+        loadCart()
     }
 }
 

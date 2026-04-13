@@ -24,3 +24,7 @@
 "deleteConfirmation.title" = "Вы уверены, что хотите удалить объект из корзины?";
 "deleteConfirmation.cancelButton.title" = "Вернуться";
 "deleteConfirmation.deleteButton.title" = "Удалить";
+
+"payment.agreement.title" = "Совершая покупку, вы соглашаетесь с условиями";
+"payment.agreementButton.title" = "Пользовательского соглашения";
+"payment.payButton.title" = "Оплатить";

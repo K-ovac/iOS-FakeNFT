@@ -119,6 +119,31 @@ final class CartViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    @objc
+    private func didTapCheckoutButton() {
+        let currenciesService = CurrenciesService(networkClient: DefaultNetworkClient())
+        let paymentService = PaymentService(networkClient: DefaultNetworkClient())
+        let completeOrderService = CompleteOrderService(networkClient: DefaultNetworkClient())
+        let clearCartService = ClearCartService()
+        
+        let viewModel = PaymentMethodsViewModel(
+            currenciesService: currenciesService,
+            paymentService: paymentService,
+            completeOrderService: completeOrderService,
+            clearCartService: clearCartService
+        )
+        
+        let viewController = PaymentMethodsViewController(viewModel: viewModel)
+        viewController.onPaymentFlowFinished = { [weak self] in
+            self?.viewModel.refresh()
+        }
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+            
+        present(navigationController, animated: true)
+    }
+    
     // MARK: - Navigation
     
     private func showDeleteConfirmation(for item: CartItem) {
@@ -230,6 +255,7 @@ extension CartViewController {
         checkoutButton.clipsToBounds = true
         checkoutButton.backgroundColor = .Button
         checkoutButton.setTitleColor(.systemBackground, for: .normal)
+        checkoutButton.addTarget(self, action: #selector(didTapCheckoutButton), for: .touchUpInside)
         
         summaryLabel.text = "5,34 ETH"
         summaryLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)

@@ -89,7 +89,6 @@ extension CartItemCell {
         nftImageView.contentMode = .scaleAspectFill
         nftImageView.layer.cornerRadius = 12
         nftImageView.clipsToBounds = true
-        nftImageView.backgroundColor = .systemGray
         
         NSLayoutConstraint.activate([
             nftImageView.widthAnchor.constraint(equalToConstant: 108),
