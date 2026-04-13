@@ -27,6 +27,17 @@ enum LocalizableKeys {
     
     // MARK: - Catalog
     static let catalogOpenNft = "Catalog.openNft".localized()
+    static let catalogSortTitle = "Catalog.sort.title".localized()
+    static let catalogSortByName = "Catalog.sort.byName".localized()
+    static let catalogSortByNftCount = "Catalog.sort.byNftCount".localized()
+    static let catalogSortCancel = "Catalog.sort.cancel".localized()
+    
+    //
+    static let refreshControlTitle = "RefreshControl.title".localized()
+    
+    // MARK: - Nft Collection
+    
+    static let collectionAuthor = "Collection.author".localized()
     
     // MARK: - Common Errors
     static let errorTitle = "Error.title".localized()

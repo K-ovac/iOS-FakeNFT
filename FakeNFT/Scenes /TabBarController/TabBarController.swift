@@ -86,16 +86,10 @@ final class TabBarController: UITabBarController {
         let cartNavigationController = UINavigationController(rootViewController: cartController)
         cartNavigationController.tabBarItem = cartTabBarItem
         
-        let statisticsController = UIViewController()
-        statisticsController.view.backgroundColor = .white
-        let statisticsNavigationController = UINavigationController(rootViewController: statisticsController)
-        statisticsNavigationController.tabBarItem = statisticsTabBarItem
-        
         viewControllers = [
             profileNavigationController,
             catalogNavigationController,
             cartNavigationController,
-            statisticsNavigationController
         ]
         
         print("✅ Tab bar configured with \(viewControllers?.count ?? 0) controllers")

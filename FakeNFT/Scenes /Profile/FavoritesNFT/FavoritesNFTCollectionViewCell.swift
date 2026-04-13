@@ -148,7 +148,7 @@ final class FavoritesNFTCollectionViewCell: UICollectionViewCell {
         nameLabel.text = nft.name
         priceLabel.text = "\(nft.price) ETH"
         
-        if let url = nft.imageUrl {
+        if let url = URL(string: nft.imageUrl ?? "") {
             imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
         

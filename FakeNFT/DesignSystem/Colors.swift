@@ -110,6 +110,11 @@ extension UIColor {
         dark: UIColor(hexString: "#1C1C1E")
     )
     
+    static let primaryForeground = dynamicColor(
+        light: UIColor(hexString: "#1A1B22"),
+        dark: UIColor(hexString: "#FFFFFF")
+    )
+    
     // MARK: - NFT Specific Colors
     
     static let ratingStarFilled = UIColor(hexString: "#FFA500")

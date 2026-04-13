@@ -10,7 +10,7 @@ import Foundation
 struct FavoritesNFTDisplayModel {
     let id: String
     let name: String
-    let imageUrl: URL?
+    let imageUrl: String?
     let rating: Int
-    let price: Double
+    let price: Float
 }

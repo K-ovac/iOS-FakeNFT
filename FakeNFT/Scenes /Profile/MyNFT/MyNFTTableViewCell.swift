@@ -136,7 +136,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         authorLabel.text = nft.author
         priceValueLabel.text = "\(nft.price) ETH"
         
-        if let url = nft.imageUrl {
+        if let url = URL(string: nft.imageUrl ?? "") {
             nftImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
         

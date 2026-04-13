@@ -129,12 +129,12 @@ final class NftCollectionViewModel {
         let message: String
         switch error {
         case is NetworkClientError:
-            message = NSLocalizedString("Error.network", comment: "")
+            message = LocalizableKeys.errorNetwork
         default:
-            message = NSLocalizedString("Error.unknown", comment: "")
+            message = LocalizableKeys.errorUnknown
         }
         
-        let actionText = NSLocalizedString("Error.repeat", comment: "")
+        let actionText = LocalizableKeys.errorRepeat
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.fetchNftCollectionInfo()
         }

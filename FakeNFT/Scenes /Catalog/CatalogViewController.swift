@@ -29,7 +29,7 @@ final class CatalogViewController: UIViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = .primaryForeground
         refreshControl.attributedTitle = NSAttributedString(
-            string: NSLocalizedString("RefreshControl.title", comment: "")
+            string: LocalizableKeys.refreshControlTitle
         )
         
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -134,24 +134,24 @@ final class CatalogViewController: UIViewController {
     
     private func showSortAlert() {
         let alert = UIAlertController(
-            title: NSLocalizedString("Catalog.sort.title", comment: ""),
+            title: LocalizableKeys.catalogSortTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
         let sortByNameAction = UIAlertAction(
-            title: NSLocalizedString("Catalog.sort.byName", comment: ""),
+            title: LocalizableKeys.catalogSortByName,
             style: .default
         ) { [weak self] _ in
             self?.catalogViewModel.sortByName()
         }
         let sortByRatingAction = UIAlertAction(
-            title: NSLocalizedString("Catalog.sort.byNftCount", comment: ""),
+            title: LocalizableKeys.catalogSortByNftCount,
             style: .default
         ) { [weak self] _ in
             self?.catalogViewModel.sortByNftsCount()
         }
         let cancelAction = UIAlertAction(
-            title: NSLocalizedString("Catalog.sort.cancel", comment: ""),
+            title: LocalizableKeys.catalogSortCancel,
             style: .cancel
         )
         

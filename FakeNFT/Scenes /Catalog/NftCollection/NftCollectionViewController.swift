@@ -42,7 +42,7 @@ final class NftCollectionViewController: UIViewController {
         label.font = .caption2
         label.textColor = .textPrimary
         label.textAlignment = .left
-        label.text = NSLocalizedString("Collection.author", comment: "static label")
+        label.text = LocalizableKeys.collectionAuthor
         
         return label
     }()
@@ -108,7 +108,7 @@ final class NftCollectionViewController: UIViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = .primaryForeground
         refreshControl.attributedTitle = NSAttributedString(
-            string: NSLocalizedString("RefreshControl.title", comment: "")
+            string: LocalizableKeys.refreshControlTitle
         )
         
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
