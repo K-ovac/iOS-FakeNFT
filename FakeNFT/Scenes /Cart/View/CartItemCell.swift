@@ -60,7 +60,7 @@ final class CartItemCell: UITableViewCell {
     func configure(with item: CartItem) {
         nameLabel.text = item.name
         configureRating(item.rating)
-        priceLabel.text = "\(item.price) ETH"
+        priceLabel.text = String(format: "%.2f ETH", item.price)
         nftImageView.setImage(from: item.imageURL)
     }
     

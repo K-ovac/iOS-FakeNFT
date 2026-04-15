@@ -140,7 +140,7 @@ final class CartService: CartServiceProtocol {
                     let item = CartItem(
                         id: nft.id,
                         name: nft.name,
-                        price: nft.price,
+                        price: Double(nft.price),
                         rating: nft.rating,
                         imageURL: URL(string: nft.images.first ?? "")
                     )
