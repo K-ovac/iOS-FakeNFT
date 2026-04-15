@@ -9,11 +9,18 @@ import Foundation
 
 final class CartService: CartServiceProtocol {
     
+    // MARK: - Constants
+        
+    private enum Constants {
+        static let orderId = "1"
+        static let successStatusCodeRange = 200..<300
+        static let lockQueueLabel = "cart.service.lock"
+    }
+    
     // MARK: - Properties
     
     private let networkClient: NetworkClient
     private let nftService: NftService
-    private let orderId = "1"
 
     // MARK: - Init
     
@@ -25,7 +32,7 @@ final class CartService: CartServiceProtocol {
     // MARK: - CartServiceProtocol
 
     func loadCart(completion: @escaping CartItemsCompletion) {
-        let request = OrderRequest(id: orderId)
+        let request = OrderRequest(id: Constants.orderId)
 
         networkClient.send(request: request, type: Order.self) { [weak self] result in
             guard let self else { return }
@@ -44,7 +51,7 @@ final class CartService: CartServiceProtocol {
     }
     
     func removeFromCart(id: String, completion: @escaping CartActionCompletion) {
-        let request = OrderRequest(id: orderId)
+        let request = OrderRequest(id: Constants.orderId)
 
         networkClient.send(request: request, type: Order.self) { [weak self] result in
             guard let self else { return }
@@ -57,7 +64,7 @@ final class CartService: CartServiceProtocol {
                 print("before:", order.nfts)
                 print("after:", updatedIds)
 
-                self.updateOrder(orderId: self.orderId, nftIds: updatedIds, completion: completion)
+                self.updateOrder(orderId: Self.Constants.orderId, nftIds: updatedIds, completion: completion)
 
             case .failure(let error):
                 completion(.failure(error))
@@ -103,7 +110,7 @@ final class CartService: CartServiceProtocol {
 
                 print("UPDATE STATUS CODE:", response.statusCode)
 
-                guard 200..<300 ~= response.statusCode else {
+                guard Constants.successStatusCodeRange ~= response.statusCode else {
                     completion(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                     return
                 }
@@ -120,7 +127,7 @@ final class CartService: CartServiceProtocol {
         }
 
         let group = DispatchGroup()
-        let lockQueue = DispatchQueue(label: "cart.service.lock")
+        let lockQueue = DispatchQueue(label: Constants.lockQueueLabel)
         var cartItems: [CartItem] = []
         var firstError: Error?
 

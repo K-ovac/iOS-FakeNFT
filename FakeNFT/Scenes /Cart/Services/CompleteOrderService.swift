@@ -9,17 +9,29 @@ import Foundation
 
 final class CompleteOrderService: CompleteOrderServiceProtocol {
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let orderId = "1"
+        static let successStatusCodeRange = 200..<300
+    }
+    
+    // MARK: - Properties
+    
     private let networkClient: NetworkClient
-    private let orderId = "1"
+    
+    // MARK: - Init
     
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
     
+    // MARK: - CompleteOrderServiceProtocol
+    
     func completeOrder(completion: @escaping CompleteOrderCompletion) {
         print("COMPLETE ORDer START")
         
-        let request = OrderRequest(id: orderId)
+        let request = OrderRequest(id: Constants.orderId)
         
         networkClient.send(request: request, type: Order.self) { [weak self] result in
             guard let self else { return }
@@ -36,8 +48,10 @@ final class CompleteOrderService: CompleteOrderServiceProtocol {
         }
     }
     
+    // MARK: - Private
+    
     private func sendCompleteRequest(nftIds: [String], completion: @escaping CompleteOrderCompletion) {
-        guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)") else {
+        guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(Constants.orderId)") else {
             completion(.failure(NetworkClientError.urlSessionError))
             return
         }
@@ -80,7 +94,7 @@ final class CompleteOrderService: CompleteOrderServiceProtocol {
                     print("COMPLETE ORDER RESPONSE: ", responseString)
                 }
                 
-                guard 200..<300 ~= response.statusCode else {
+                guard Constants.successStatusCodeRange ~= response.statusCode else {
                     completion(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                     return
                 }

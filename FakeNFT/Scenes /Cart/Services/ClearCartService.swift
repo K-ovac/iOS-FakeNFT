@@ -9,14 +9,17 @@ import Foundation
 
 final class ClearCartService: ClearCartServiceProtocol {
     
-    // MARK: - Properties
+    // MARK: - Constants
     
-    private let orderId = "1"
+    private enum Constants {
+        static let orderId = "1"
+        static let successStatusCodeRange = 200..<300
+    }
     
     // MARK: - ClearCartServiceProtocol
     
     func clearCart(completion: @escaping ClearCartCompletion) {
-        guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)") else {
+        guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(Constants.orderId)") else {
             completion(.failure(NetworkClientError.urlSessionError))
             return
         }
@@ -50,7 +53,7 @@ final class ClearCartService: ClearCartServiceProtocol {
                     print("CLEAR CART RESPONSE:", responseString)
                 }
 
-                guard 200..<300 ~= response.statusCode else {
+                guard Constants.successStatusCodeRange ~= response.statusCode else {
                     completion(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                     return
                 }

@@ -9,6 +9,19 @@ import UIKit
 
 final class PaymentMethodCell: UICollectionViewCell {
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let contentCornerRadius: CGFloat = 12
+        static let imageSize: CGFloat = 36
+        static let imageLeadingInset: CGFloat = 12
+        static let imageCornerRadius: CGFloat = 6
+        static let labelsLeadingInset: CGFloat = 4
+        static let titleTopInset: CGFloat = 5
+        static let labelHeight: CGFloat = 18
+        static let selectedBorderWidth: CGFloat = 1
+    }
+    
     // MARK: - Properties
     
     static let paymentIdentifier = "PaymentMethodCell"
@@ -37,15 +50,15 @@ final class PaymentMethodCell: UICollectionViewCell {
     }
     
     func setSelected(_ isSelected: Bool) {
-        layer.cornerRadius = isSelected ? 12 : 0
-        layer.borderWidth = isSelected ? 1 : 0
+        layer.cornerRadius = isSelected ? Constants.contentCornerRadius : 0
+        layer.borderWidth = isSelected ? Constants.selectedBorderWidth : 0
         layer.borderColor = isSelected ? UIColor.label.cgColor : UIColor.clear.cgColor
     }
     
     // MARK: - Setup
     
     private func setupUI() {
-        contentView.layer.cornerRadius = 12
+        contentView.layer.cornerRadius = Constants.contentCornerRadius
         contentView.clipsToBounds = true
         contentView.backgroundColor = .bottomContainer
         setupCurrencyImageView()
@@ -60,13 +73,13 @@ private extension PaymentMethodCell {
         currencyImageView.translatesAutoresizingMaskIntoConstraints = false
         
         currencyImageView.clipsToBounds = true
-        currencyImageView.layer.cornerRadius = 6
+        currencyImageView.layer.cornerRadius = Constants.imageCornerRadius
         currencyImageView.backgroundColor = .black
         
         NSLayoutConstraint.activate([
-            currencyImageView.widthAnchor.constraint(equalToConstant: 36),
-            currencyImageView.heightAnchor.constraint(equalToConstant: 36),
-            currencyImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            currencyImageView.widthAnchor.constraint(equalToConstant: Constants.imageSize),
+            currencyImageView.heightAnchor.constraint(equalToConstant: Constants.imageSize),
+            currencyImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.imageLeadingInset),
             currencyImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
@@ -78,9 +91,9 @@ private extension PaymentMethodCell {
         currencyTitleLabel.font = .systemFont(ofSize: 13, weight: .regular)
         
         NSLayoutConstraint.activate([
-            currencyTitleLabel.leadingAnchor.constraint(equalTo: currencyImageView.trailingAnchor, constant: 4),
-            currencyTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            currencyTitleLabel.heightAnchor.constraint(equalToConstant: 18)
+            currencyTitleLabel.leadingAnchor.constraint(equalTo: currencyImageView.trailingAnchor, constant: Constants.labelsLeadingInset),
+            currencyTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.titleTopInset),
+            currencyTitleLabel.heightAnchor.constraint(equalToConstant: Constants.labelHeight)
         ])
     }
     
@@ -92,7 +105,7 @@ private extension PaymentMethodCell {
         currencyNameLabel.textColor = .textCurrencyName
         
         NSLayoutConstraint.activate([
-            currencyNameLabel.leadingAnchor.constraint(equalTo: currencyImageView.trailingAnchor, constant: 4),
+            currencyNameLabel.leadingAnchor.constraint(equalTo: currencyImageView.trailingAnchor, constant: Constants.labelsLeadingInset),
             currencyNameLabel.topAnchor.constraint(equalTo: currencyTitleLabel.bottomAnchor),
             currencyNameLabel.heightAnchor.constraint(equalToConstant: 18)
         ])

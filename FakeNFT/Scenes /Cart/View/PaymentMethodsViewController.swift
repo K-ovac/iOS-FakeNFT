@@ -10,6 +10,24 @@ import ProgressHUD
 
 final class PaymentMethodsViewController: UIViewController {
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let collectionTopInset: CGFloat = 20
+        static let layoutSpacing: CGFloat = 7
+        static let sectionInset: CGFloat = 16
+        static let itemHeight: CGFloat = 46
+        static let bottomContainerHeight: CGFloat = 186
+        static let bottomContainerCornerRadius: CGFloat = 12
+        static let horizontalInset: CGFloat = 16
+        static let agreementTopInset: CGFloat = 16
+        static let agreementSpacing: CGFloat = 4
+        static let payButtonTopInset: CGFloat = 16
+        static let payButtonWidth: CGFloat = 343
+        static let payButtonHeight: CGFloat = 60
+        static let payButtonCornerRadius: CGFloat = 16
+    }
+    
     // MARK: - Properties
     
     private var viewModel: PaymentMethodsViewModelProtocol
@@ -29,11 +47,7 @@ final class PaymentMethodsViewController: UIViewController {
     init(viewModel: PaymentMethodsViewModelProtocol) {
         self.viewModel = viewModel
             
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 7
-        layout.minimumInteritemSpacing = 7
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-            
+        let layout = Self.setupLayout()
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
             
         super.init(nibName: nil, bundle: nil)
@@ -124,7 +138,7 @@ final class PaymentMethodsViewController: UIViewController {
         viewModel.didTapPay()
     }
     
-    // MARK: -
+    // MARK: - Navigation
     
     private func showAgreement(url: URL) {
         let viewController = AgreementViewController(url: url)
@@ -170,6 +184,14 @@ final class PaymentMethodsViewController: UIViewController {
         setupPayButton()
         setupCollectionView()
     }
+    
+    private static func setupLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = Constants.layoutSpacing
+        layout.minimumInteritemSpacing = Constants.layoutSpacing
+        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.sectionInset, bottom: 0, right: Constants.sectionInset)
+        return layout
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -199,10 +221,10 @@ extension PaymentMethodsViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let horizontalInsets: CGFloat = 16 * 2
-        let spacing: CGFloat = 7
+        let horizontalInsets: CGFloat = Constants.horizontalInset * 2
+        let spacing: CGFloat = Constants.layoutSpacing
         let width = (collectionView.bounds.width - horizontalInsets - spacing) / 2
-        return CGSize(width: width, height: 46)
+        return CGSize(width: width, height: Constants.itemHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -225,7 +247,7 @@ private extension PaymentMethodsViewController {
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.collectionTopInset),
             collectionView.bottomAnchor.constraint(equalTo: bottomContainerView.topAnchor)
         ])
     }
@@ -239,11 +261,11 @@ private extension PaymentMethodsViewController {
         agreementButton.addTarget(self, action: #selector(didTapAgreementButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            agreementTitleLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: 16),
-            agreementTitleLabel.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: 16),
+            agreementTitleLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: Constants.horizontalInset),
+            agreementTitleLabel.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: Constants.agreementTopInset),
             
             agreementButton.leadingAnchor.constraint(equalTo: agreementTitleLabel.leadingAnchor),
-            agreementButton.topAnchor.constraint(equalTo: agreementTitleLabel.bottomAnchor, constant: 4),
+            agreementButton.topAnchor.constraint(equalTo: agreementTitleLabel.bottomAnchor, constant: Constants.agreementSpacing),
         ])
     }
     
@@ -251,16 +273,16 @@ private extension PaymentMethodsViewController {
         payButton.setTitle(NSLocalizedString("payment.payButton.title", comment: ""), for: .normal)
         payButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         payButton.backgroundColor = .Button
-        payButton.layer.cornerRadius = 16
+        payButton.layer.cornerRadius = Constants.payButtonCornerRadius
         payButton.layer.masksToBounds = true
         payButton.setTitleColor(.systemBackground, for: .normal)
         payButton.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            payButton.widthAnchor.constraint(equalToConstant: 343),
-            payButton.heightAnchor.constraint(equalToConstant: 60),
+            payButton.widthAnchor.constraint(equalToConstant: Constants.payButtonWidth),
+            payButton.heightAnchor.constraint(equalToConstant: Constants.payButtonHeight),
             payButton.centerXAnchor.constraint(equalTo: bottomContainerView.centerXAnchor),
-            payButton.topAnchor.constraint(equalTo: agreementButton.bottomAnchor, constant: 16)
+            payButton.topAnchor.constraint(equalTo: agreementButton.bottomAnchor, constant: Constants.payButtonTopInset)
         ])
     }
     
@@ -275,13 +297,13 @@ private extension PaymentMethodsViewController {
         agreementButton.translatesAutoresizingMaskIntoConstraints = false
         payButton.translatesAutoresizingMaskIntoConstraints = false
         
-        bottomContainerView.layer.cornerRadius = 12
+        bottomContainerView.layer.cornerRadius = Constants.bottomContainerCornerRadius
         bottomContainerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         bottomContainerView.layer.masksToBounds = true
         bottomContainerView.backgroundColor = .bottomContainer
         
         NSLayoutConstraint.activate([
-            bottomContainerView.heightAnchor.constraint(equalToConstant: 186),
+            bottomContainerView.heightAnchor.constraint(equalToConstant: Constants.bottomContainerHeight),
             bottomContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

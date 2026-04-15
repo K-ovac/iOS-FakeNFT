@@ -64,19 +64,12 @@ final class PaymentMethodsViewModel: PaymentMethodsViewModelProtocol {
         loadCurrencies()
     }
     
-    // MARK: -
-    
     func didSelectCurrency(at index: Int) {
         guard index < items.count else { return }
             
         selectedCurrencyId = items[index].id
         onItemsChanged?(items)
         onPayButtonStateChanged?(true)
-    }
-    
-    func isCurrencySelected(at index: Int) -> Bool {
-        guard index < items.count else { return false }
-        return items[index].id == selectedCurrencyId
     }
     
     func didTapAgreement() {
@@ -132,6 +125,13 @@ final class PaymentMethodsViewModel: PaymentMethodsViewModelProtocol {
                 self.onPaymentError?("Не удалось выполнить оплату")
             }
         }
+    }
+    
+    // MARK: - State
+    
+    func isCurrencySelected(at index: Int) -> Bool {
+        guard index < items.count else { return false }
+        return items[index].id == selectedCurrencyId
     }
 }
 
