@@ -687,7 +687,6 @@
 				9F2017E72F79828000432AC2 /* FavoritesNFTCollectionViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				9F2017E32F79824200432AC2 /* FavoritesNFTModel.swift in Sources */,
-				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
 				5DA0610E2F8D71AC00EC2494 /* CompleteOrderRequest.swift in Sources */,
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
