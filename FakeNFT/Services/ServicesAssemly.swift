@@ -16,5 +16,11 @@ final class ServicesAssembly {
     
     var profileService: ProfileService {
         ProfileServiceImpl(networkClient: networkClient)
+
+    var cartService: CartServiceProtocol {
+        CartService(
+            networkClient: networkClient,
+            nftService: nftService
+        )
     }
 }

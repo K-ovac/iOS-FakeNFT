@@ -152,7 +152,9 @@ struct DefaultNetworkClient: NetworkClient {
             
             if !parameters.isEmpty {
                 var components = URLComponents()
-                components.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+                components.queryItems = parameters.map {
+                    URLQueryItem(name: $0.key, value: $0.value)
+                }
                 urlRequest.httpBody = components.query?.data(using: .utf8)
                 urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                 print("📦 Sending as URL-encoded with parameters: \(parameters)")
