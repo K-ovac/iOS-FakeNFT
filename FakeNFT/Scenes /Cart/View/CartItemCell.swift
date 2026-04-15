@@ -8,6 +8,27 @@ import UIKit
 
 final class CartItemCell: UITableViewCell {
     
+    // MARK: - Constants
+    
+    // MARK: - Constants
+        
+    private enum Constants {
+        static let imageSize: CGFloat = 108
+        static let horizontalInset: CGFloat = 16
+        static let verticalInset: CGFloat = 16
+        static let infoViewLeading: CGFloat = 20
+        static let infoViewWidth: CGFloat = 76
+        static let infoViewHeight: CGFloat = 92
+        static let infoViewTopInset: CGFloat = 24
+        static let deleteButtonSize: CGFloat = 40
+        static let cornerRadius: CGFloat = 12
+        static let ratingTopInset: CGFloat = 4
+        static let priceTitleTopInset: CGFloat = 12
+        static let priceTopInset: CGFloat = 2
+        static let starSize: CGFloat = 12
+        static let ratingSpacing: CGFloat = 2
+    }
+    
     // MARK: - Properties
     
     static let reuseIdentifier = "CartItemCell"
@@ -87,16 +108,15 @@ extension CartItemCell {
         nftImageView.translatesAutoresizingMaskIntoConstraints = false
         
         nftImageView.contentMode = .scaleAspectFill
-        nftImageView.layer.cornerRadius = 12
+        nftImageView.layer.cornerRadius = Constants.cornerRadius
         nftImageView.clipsToBounds = true
-        nftImageView.backgroundColor = .systemGray
         
         NSLayoutConstraint.activate([
-            nftImageView.widthAnchor.constraint(equalToConstant: 108),
-            nftImageView.heightAnchor.constraint(equalToConstant: 108),
-            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            nftImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            nftImageView.widthAnchor.constraint(equalToConstant: Constants.imageSize),
+            nftImageView.heightAnchor.constraint(equalToConstant: Constants.imageSize),
+            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalInset),
+            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.horizontalInset),
+            nftImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.horizontalInset)
         ])
     }
     
@@ -117,10 +137,10 @@ extension CartItemCell {
             nameLabel.topAnchor.constraint(equalTo: cartItemInfoView.topAnchor),
             
             priceTitleLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            priceTitleLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
+            priceTitleLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: Constants.priceTitleTopInset),
             
             priceLabel.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            priceLabel.topAnchor.constraint(equalTo: priceTitleLabel.bottomAnchor, constant: 2),
+            priceLabel.topAnchor.constraint(equalTo: priceTitleLabel.bottomAnchor, constant: Constants.priceTopInset),
         ])
 
     }
@@ -129,15 +149,15 @@ extension CartItemCell {
         ratingStackView.translatesAutoresizingMaskIntoConstraints = false
         
         ratingStackView.axis = .horizontal
-        ratingStackView.spacing = 2
+        ratingStackView.spacing = Constants.ratingSpacing
         ratingStackView.alignment = .leading
 
         for _ in 0..<5 {
             let imageView = UIImageView()
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.contentMode = .scaleAspectFit
-            imageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            imageView.widthAnchor.constraint(equalToConstant: Constants.starSize).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: Constants.starSize).isActive = true
             
             starImageViews.append(imageView)
             ratingStackView.addArrangedSubview(imageView)
@@ -145,7 +165,7 @@ extension CartItemCell {
         
         NSLayoutConstraint.activate([
             ratingStackView.leadingAnchor.constraint(equalTo: cartItemInfoView.leadingAnchor),
-            ratingStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ratingStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: Constants.ratingTopInset),
             ratingStackView.heightAnchor.constraint(equalToConstant: 12),
         ])
     }
@@ -160,11 +180,11 @@ extension CartItemCell {
         cartItemInfoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            cartItemInfoView.widthAnchor.constraint(equalToConstant: 76),
-            cartItemInfoView.heightAnchor.constraint(equalToConstant: 92),
-            cartItemInfoView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
-            cartItemInfoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            cartItemInfoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
+            cartItemInfoView.widthAnchor.constraint(equalToConstant: Constants.infoViewWidth),
+            cartItemInfoView.heightAnchor.constraint(equalToConstant: Constants.infoViewHeight),
+            cartItemInfoView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: Constants.infoViewLeading),
+            cartItemInfoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.infoViewTopInset),
+            cartItemInfoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.infoViewTopInset)
         ])
     }
     
@@ -178,10 +198,10 @@ extension CartItemCell {
         deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            deleteButton.widthAnchor.constraint(equalToConstant: 40),
-            deleteButton.heightAnchor.constraint(equalToConstant: 40),
+            deleteButton.widthAnchor.constraint(equalToConstant: Constants.deleteButtonSize),
+            deleteButton.heightAnchor.constraint(equalToConstant: Constants.deleteButtonSize),
             deleteButton.centerYAnchor.constraint(equalTo: cartItemInfoView.centerYAnchor),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalInset)
         ])
     }
     

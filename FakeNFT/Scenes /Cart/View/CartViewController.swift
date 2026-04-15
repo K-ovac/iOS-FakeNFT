@@ -10,6 +10,26 @@ import ProgressHUD
 
 final class CartViewController: UIViewController {
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let sortButtonSize: CGFloat = 42
+        static let sortButtonTrailingInset: CGFloat = 9
+        static let sortButtonTopInset: CGFloat = 2
+        static let tableViewTopInset: CGFloat = 20
+        static let tableViewRowHeight: CGFloat = 140
+        static let bottomContainerHeight: CGFloat = 76
+        static let bottomContainerCornerRadius: CGFloat = 16
+        static let horizontalInset: CGFloat = 16
+        static let checkoutButtonHeight: CGFloat = 44
+        static let checkoutButtonCornerRadius: CGFloat = 16
+        static let checkoutButtonLeadingInset: CGFloat = 24
+        static let countLabelTopInset: CGFloat = 16
+        static let countLabelHeight: CGFloat = 20
+        static let summaryLabelTopInset: CGFloat = 2
+        static let emptyStateHeight: CGFloat = 22
+    }
+    
     // MARK: - Properties
     
     private var viewModel: CartViewModelProtocol
@@ -93,12 +113,12 @@ final class CartViewController: UIViewController {
         
         viewModel.onError = { [weak self] message in
             let alert = UIAlertController(
-                title: "Ошибка",
+                title: NSLocalizedString("alert.error", comment: ""),
                 message: message,
                 preferredStyle: .alert
             )
 
-            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("alert.ok", comment: ""), style: .default))
             self?.present(alert, animated: true)
         }
     }
@@ -117,6 +137,31 @@ final class CartViewController: UIViewController {
 
         alert.addAction(UIAlertAction(title: NSLocalizedString("cart.sortAlert.cancel", comment: ""), style: .cancel))
         present(alert, animated: true)
+    }
+    
+    @objc
+    private func didTapCheckoutButton() {
+        let currenciesService = CurrenciesService(networkClient: DefaultNetworkClient())
+        let paymentService = PaymentService(networkClient: DefaultNetworkClient())
+        let completeOrderService = CompleteOrderService(networkClient: DefaultNetworkClient())
+        let clearCartService = ClearCartService()
+        
+        let viewModel = PaymentMethodsViewModel(
+            currenciesService: currenciesService,
+            paymentService: paymentService,
+            completeOrderService: completeOrderService,
+            clearCartService: clearCartService
+        )
+        
+        let viewController = PaymentMethodsViewController(viewModel: viewModel)
+        viewController.onPaymentFlowFinished = { [weak self] in
+            self?.viewModel.refresh()
+        }
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+            
+        present(navigationController, animated: true)
     }
     
     // MARK: - Navigation
@@ -188,10 +233,10 @@ extension CartViewController {
         sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            sortButton.heightAnchor.constraint(equalToConstant: 42),
-            sortButton.widthAnchor.constraint(equalToConstant: 42),
-            sortButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -9),
-            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2)
+            sortButton.heightAnchor.constraint(equalToConstant: Constants.sortButtonSize),
+            sortButton.widthAnchor.constraint(equalToConstant: Constants.sortButtonSize),
+            sortButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.sortButtonTrailingInset),
+            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.sortButtonTopInset)
         ])
     }
     
@@ -199,14 +244,14 @@ extension CartViewController {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
-        tableView.rowHeight = 140
+        tableView.rowHeight = Constants.tableViewRowHeight
         
         tableView.register(CartItemCell.self, forCellReuseIdentifier: CartItemCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: Constants.tableViewTopInset),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomContainerView.topAnchor)
@@ -226,39 +271,38 @@ extension CartViewController {
         
         checkoutButton.setTitle(NSLocalizedString("cart.checkoutButton.title", comment: ""), for: .normal)
         checkoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        checkoutButton.layer.cornerRadius = 16
+        checkoutButton.layer.cornerRadius = Constants.checkoutButtonCornerRadius
         checkoutButton.clipsToBounds = true
         checkoutButton.backgroundColor = .Button
         checkoutButton.setTitleColor(.systemBackground, for: .normal)
+        checkoutButton.addTarget(self, action: #selector(didTapCheckoutButton), for: .touchUpInside)
         
-        summaryLabel.text = "5,34 ETH"
         summaryLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         summaryLabel.textColor = .systemGreen
         
-        countNFTLabel.text = "3 NFT"
         countNFTLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         
         bottomContainerView.backgroundColor = .bottomContainer
-        bottomContainerView.layer.cornerRadius = 16
+        bottomContainerView.layer.cornerRadius = Constants.bottomContainerCornerRadius
         bottomContainerView.clipsToBounds = true
         
         NSLayoutConstraint.activate([
             bottomContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            bottomContainerView.heightAnchor.constraint(equalToConstant: 76),
+            bottomContainerView.heightAnchor.constraint(equalToConstant: Constants.bottomContainerHeight),
             
             checkoutButton.centerYAnchor.constraint(equalTo: bottomContainerView.centerYAnchor),
-            checkoutButton.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor, constant: -16),
-            checkoutButton.heightAnchor.constraint(equalToConstant: 44),
-            checkoutButton.leadingAnchor.constraint(equalTo: summaryLabel.trailingAnchor, constant: 24),
+            checkoutButton.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor, constant: -Constants.horizontalInset),
+            checkoutButton.heightAnchor.constraint(equalToConstant: Constants.checkoutButtonHeight),
+            checkoutButton.leadingAnchor.constraint(equalTo: summaryLabel.trailingAnchor, constant: Constants.checkoutButtonLeadingInset),
             
-            countNFTLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: 16),
-            countNFTLabel.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: 16),
-            countNFTLabel.heightAnchor.constraint(equalToConstant: 20),
+            countNFTLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: Constants.horizontalInset),
+            countNFTLabel.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: Constants.countLabelTopInset),
+            countNFTLabel.heightAnchor.constraint(equalToConstant: Constants.countLabelHeight),
             
-            summaryLabel.topAnchor.constraint(equalTo: countNFTLabel.bottomAnchor, constant: 2),
-            summaryLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: 16),
+            summaryLabel.topAnchor.constraint(equalTo: countNFTLabel.bottomAnchor, constant: Constants.summaryLabelTopInset),
+            summaryLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: Constants.horizontalInset),
         ])
     }
     
@@ -276,7 +320,7 @@ extension CartViewController {
             emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             emptyStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyStateView.heightAnchor.constraint(equalToConstant: 22),
+            emptyStateView.heightAnchor.constraint(equalToConstant: Constants.emptyStateHeight),
             
             emptyStateLabel.centerYAnchor.constraint(equalTo: emptyStateView.centerYAnchor),
             emptyStateLabel.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor)

@@ -9,6 +9,22 @@ import UIKit
 
 final class DeleteConfirmationViewController: UIViewController {
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let imageTopInset: CGFloat = 244
+        static let imageSize: CGFloat = 108
+        static let cornerRadius: CGFloat = 12
+        static let titleTopInset: CGFloat = 12
+        static let titleHeight: CGFloat = 36
+        static let titleLeadingInset: CGFloat = 97
+        static let buttonsTopInset: CGFloat = 20
+        static let buttonHeight: CGFloat = 44
+        static let buttonWidth: CGFloat = 127
+        static let buttonsSpacing: CGFloat = 8
+        static let deleteButtonTrailingOffset: CGFloat = 4
+    }
+    
     // MARK: - Properties
     
     var onConfirm: (() -> Void)?
@@ -93,13 +109,13 @@ extension DeleteConfirmationViewController {
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 12
+        imageView.layer.cornerRadius = Constants.cornerRadius
         
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 244),
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.imageTopInset),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 108),
-            imageView.heightAnchor.constraint(equalToConstant: 108)
+            imageView.widthAnchor.constraint(equalToConstant: Constants.imageSize),
+            imageView.heightAnchor.constraint(equalToConstant: Constants.imageSize)
         ])
     }
     
@@ -113,9 +129,9 @@ extension DeleteConfirmationViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 36),
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 12),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 97)
+            titleLabel.heightAnchor.constraint(equalToConstant: Constants.titleHeight),
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.titleTopInset),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.titleLeadingInset)
         ])
     }
     
@@ -131,7 +147,7 @@ extension DeleteConfirmationViewController {
         cancelButton.backgroundColor = .Button
         cancelButton.setTitleColor(.systemBackground, for: .normal)
         cancelButton.clipsToBounds = true
-        cancelButton.layer.cornerRadius = 12
+        cancelButton.layer.cornerRadius = Constants.cornerRadius
         cancelButton.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         
         deleteButton.setTitle(NSLocalizedString("deleteConfirmation.deleteButton.title", comment: ""), for: .normal)
@@ -139,19 +155,19 @@ extension DeleteConfirmationViewController {
         deleteButton.backgroundColor = .Button
         deleteButton.setTitleColor(.systemRed, for: .normal)
         deleteButton.clipsToBounds = true
-        deleteButton.layer.cornerRadius = 12
+        deleteButton.layer.cornerRadius = Constants.cornerRadius
         deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 56),
-            deleteButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            deleteButton.heightAnchor.constraint(equalToConstant: 44),
-            deleteButton.widthAnchor.constraint(equalToConstant: 127),
+            deleteButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -Constants.deleteButtonTrailingOffset),
+            deleteButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.buttonsTopInset),
+            deleteButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            deleteButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
             
-            cancelButton.leadingAnchor.constraint(equalTo: deleteButton.trailingAnchor, constant: 8),
-            cancelButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            cancelButton.heightAnchor.constraint(equalToConstant: 44),
-            cancelButton.widthAnchor.constraint(equalToConstant: 127),
+            cancelButton.leadingAnchor.constraint(equalTo: deleteButton.trailingAnchor, constant: Constants.buttonsSpacing),
+            cancelButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.buttonsTopInset),
+            cancelButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            cancelButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
         ])
     }
 }
