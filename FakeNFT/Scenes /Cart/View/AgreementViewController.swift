@@ -30,7 +30,7 @@ final class AgreementViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Пользовательское соглашение"
+        title = NSLocalizedString("agreement.title", comment: "")
         
         setupUI()
         loadPage()

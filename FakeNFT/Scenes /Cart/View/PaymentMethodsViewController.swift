@@ -48,7 +48,7 @@ final class PaymentMethodsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Выберите способ оплаты"
+        title = NSLocalizedString("payment.title", comment: "")
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
                 image: UIImage(systemName: "chevron.left"),
@@ -80,12 +80,12 @@ final class PaymentMethodsViewController: UIViewController {
             
         viewModel.onError = { [weak self] message in
             let alert = UIAlertController(
-                title: "Ошибка",
+                title: NSLocalizedString("alert.error", comment: ""),
                 message: message,
                 preferredStyle: .alert
             )
                 
-            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("alert.ok", comment: ""), style: .default))
             self?.present(alert, animated: true)
         }
         
@@ -133,14 +133,14 @@ final class PaymentMethodsViewController: UIViewController {
     
     private func showPaymentErrorAlert(message: String) {
         let alert = UIAlertController(
-            title: "Не удалось произвести оплату",
+            title: NSLocalizedString("payment.errorAlert.title", comment: ""),
             message: message,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("payment.errorAlert.cancel", comment: ""), style: .cancel))
         
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("payment.errorAlert.repeat", comment: ""), style: .default) { [weak self] _ in
             self?.viewModel.didTapPay()
         })
         

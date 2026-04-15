@@ -63,7 +63,7 @@ private extension PaymentSuccessViewController {
         
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        placeholderLabel.text = "Успех! Оплата прошла, поздравляем с покупкой!"
+        placeholderLabel.text = NSLocalizedString("payment.success.title", comment: "")
         placeholderLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         placeholderLabel.numberOfLines = 2
         placeholderLabel.textAlignment = .center
@@ -81,7 +81,7 @@ private extension PaymentSuccessViewController {
         backToCartButton.translatesAutoresizingMaskIntoConstraints = false
         
         backToCartButton.addTarget(self, action: #selector(didTapBackToCartButton), for: .touchUpInside)
-        backToCartButton.setTitle("Вернуться в корзину", for: .normal)
+        backToCartButton.setTitle(NSLocalizedString("payment.success.button.title", comment: ""), for: .normal) 
         backToCartButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         backToCartButton.setTitleColor(.systemBackground, for: .normal)
         backToCartButton.layer.cornerRadius = 16

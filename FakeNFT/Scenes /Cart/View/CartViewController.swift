@@ -93,12 +93,12 @@ final class CartViewController: UIViewController {
         
         viewModel.onError = { [weak self] message in
             let alert = UIAlertController(
-                title: "Ошибка",
+                title: NSLocalizedString("alert.error", comment: ""),
                 message: message,
                 preferredStyle: .alert
             )
 
-            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("alert.ok", comment: ""), style: .default))
             self?.present(alert, animated: true)
         }
     }
@@ -257,11 +257,9 @@ extension CartViewController {
         checkoutButton.setTitleColor(.systemBackground, for: .normal)
         checkoutButton.addTarget(self, action: #selector(didTapCheckoutButton), for: .touchUpInside)
         
-        summaryLabel.text = "5,34 ETH"
         summaryLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         summaryLabel.textColor = .systemGreen
         
-        countNFTLabel.text = "3 NFT"
         countNFTLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         
         bottomContainerView.backgroundColor = .bottomContainer
